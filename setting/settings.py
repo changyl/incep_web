@@ -53,7 +53,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'backup.urls'
+ROOT_URLCONF = 'setting.urls'
 
 TEMPLATES = [
     {
@@ -71,7 +71,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backup.wsgi.application'
+WSGI_APPLICATION = 'setting.wsgi.application'
 
 
 # Database
@@ -117,7 +117,7 @@ DATABASES = {
 
 
 
-DATABASE_ROUTERS = ['backup.databaseRouter.modelsRouter', 'backup.databaseRouter.ReportRouter','backup.databaseRouter.ExecuteRoutor']
+DATABASE_ROUTERS = ['setting.databaseRouter.modelsRouter', 'setting.databaseRouter.ReportRouter','setting.databaseRouter.ExecuteRoutor']
 # DATABASE_APPS_MAPPING = {
 #     # example:
 #     #'app_name':'database_name',

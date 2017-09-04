@@ -2415,3 +2415,4 @@ Thu, 31 Aug 2017 19:28:23 viewReview.py[line:179] DEBUG /*--user=inception;--pas
 Thu, 31 Aug 2017 20:14:21 viewReviewReport.py[line:129] ERROR (1052, "Column 'create_time' in where clause is ambiguous")
 Thu, 31 Aug 2017 20:15:50 viewReviewReport.py[line:129] ERROR (1052, "Column 'create_time' in where clause is ambiguous")
 Thu, 31 Aug 2017 20:15:57 viewReviewReport.py[line:129] ERROR (1052, "Column 'create_time' in where clause is ambiguous")
+Mon, 04 Sep 2017 11:35:41 base.py[line:152] WARNING Not Found: /favicon.ico

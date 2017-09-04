@@ -195,6 +195,7 @@
                               type: "post",
                               url: "{% url 'reviewReportActive' %}",
                               data: data,
+                              timeout:"10000",
                               async: true,
                               cache: false,
                               success: function (res) {
