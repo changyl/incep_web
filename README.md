@@ -58,9 +58,10 @@ DATABASE_ROUTERS = ['setting.databaseRouter.modelsRouter', 'setting.databaseRout
 	
 ## amdin管理系统的配置
   管理系统入口就是django自带的后端管理,只需要在url后加admin：
-  http://127.0.0.1:8080/amdin
+  http://127.0.0.1:8080/admin
   
-# 首页登录
+## 首页登录实例图
+
 
 
 
