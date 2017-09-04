@@ -61,7 +61,7 @@ DATABASE_ROUTERS = ['setting.databaseRouter.modelsRouter', 'setting.databaseRout
   http://127.0.0.1:8080/admin
   
 ## 首页登录实例图
-![](https://github.com/changyl/incep_web/models/static/img/1.png)
+![](https://github.com/changyl/incep_web/blob/master/models/static/img/1.png)
 
 
 
