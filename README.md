@@ -64,4 +64,6 @@ DATABASE_ROUTERS = ['setting.databaseRouter.modelsRouter', 'setting.databaseRout
 ![](https://github.com/changyl/incep_web/blob/master/models/static/img/1.png)
 
 
-
+## 仪表盘
+![](https://github.com/changyl/incep_web/blob/master/models/static/img/2.png)
+![](https://github.com/changyl/incep_web/blob/master/models/static/img/3.png)
