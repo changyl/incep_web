@@ -1,0 +1,317 @@
+{% extends "review/base.html" %}
+{% load static %}
+{% block title %}title name{% endblock %}
+{% block bside %}
+     <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element"> <span>
+
+                             </span>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{user}}</strong>
+                             </span> <span class="text-muted text-xs block"><b class="caret"></b></span> </span> </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+{#                                <li><a href="{% url 'userPofile' %}">Profile</a></li>#}
+{#                                <li class="divider"></li>#}
+                                <li><a href="{% url 'userLogout' %}">Logout</a></li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                            IN+
+                        </div>
+                    </li>
+
+
+                    <li class="active">
+                        <a href="{{user.url}}"><i class="fa fa-th-large"></i> <span class="nav-label">主页</span> <span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li class="active"><a href="{% url 'home' %}">仪表盘</a></li>
+{#                            <li><a href="dashboard_2.html">Dashboard v.2</a></li>#}
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-globe"></i> <span class="nav-label">SQL审核</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="{% url 'reviewTemp' %}">临时审核</a></li>
+                            <li><a href="{% url 'reviewReportListAll' %}">审核列表</a></li>
+                            <li><a href="{% url 'reviewListAllHistory' %}">历史列表</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#"><i class="fa fa-book"></i> <span class="nav-label">使用示例</span></a>
+                    </li>
+                </ul>
+{% endblock %}
+
+{% block jscripts %}
+    <script src="{% static 'js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
+    <script src="{% static 'js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+    <!-- Custom and plugin javascript -->
+    <script src="{% static 'js/inspinia.js' %}"></script>
+    <script src="{% static 'js/plugins/pace/pace.min.js' %}"></script>
+    <!-- ChartJS-->
+    <script src="{% static 'js/plugins/echart/echarts.common.min.js' %}"></script>
+
+    <!-- Toastr -->
+    <script src="{% static 'js/plugins/toastr/toastr.min.js' %}"></script>
+
+
+    <script>
+        $.ajaxSetup({
+                data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+         });
+        $(document).ready(function() {
+            setTimeout(function() {
+                toastr.options = {
+                    closeButton: true,
+                    progressBar: true,
+                    showMethod: 'slideDown',
+                    timeOut: 4000
+                };
+                toastr.success('三思而行', '欢迎使用SQL审核平台！');
+
+            }, 1300);
+
+            var myChart = echarts.init(document.getElementById('chart2'));
+            myChart.setOption({
+                        title : {
+                            text: 'SQL审核DML比例',
+                            subtext: '',
+                            x:'center'
+                        },
+                        tooltip : {
+                            trigger: 'item',
+                            formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                            data: ['delete','insert','update']
+                        },
+                        series : [
+                            {
+                                name: 'DML比例',
+                                type: 'pie',
+                                radius : '55%',
+                                center: ['50%', '60%'],
+                                data:[
+                                ],
+                                itemStyle: {
+                                    emphasis: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(2, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ],
+                    color:['#dedede', '#d48265','#A4CEE8']
+                    }),
+            $.ajax({
+                url:"{% url 'index_char_pie' %}",
+                type:'post',
+                timeout:"3000",
+                cache:"false",
+                dataType:"json",
+                success:function(dt){
+                    piechar(dt);
+                },
+                error:function(err){
+                    console.log("error");
+                }
+            });
+            function piechar(dt) {
+                    var ser = [{value:dt.stat[0],name:'delete'},{value:dt.stat[1],name:'insert'},{value:dt.stat[2],name:'update'}];
+                    myChart.setOption({
+                        series: [{
+                            // 根据名字对应到相应的系列
+                            name: 'DML比例',
+                            data: ser
+                        }]
+                    })
+            };
+        })
+    </script>
+
+    <script>
+         $(document).ready(function() {
+            var myChart = echarts.init(document.getElementById('chart3'));
+            myChart.setOption({
+                        title : {
+                            text: 'SQL审核DDL比例',
+                            subtext: '',
+                            x:'center'
+                        },
+                        tooltip : {
+                            trigger: 'item',
+                            formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                            data: ['altertable','renam','createindex','dropindex','addcolumn','changecolumn','createtable','truncat']
+                        },
+                        series : [
+                            {
+                                name: 'DML比例',
+                                type: 'pie',
+                                radius : '55%',
+                                center: ['50%', '60%'],
+                                data:[
+                                ],
+                                itemStyle: {
+                                    emphasis: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ],
+                    color:['#546570', '#dedede','#A4CEE8','#c4ccd3','#d48265','#bda29a','#61a0a8','#a3e1d4']
+                    });
+            $.ajax({
+                url:"{% url 'index_char_pie_ddl' %}",
+                type:'post',
+                timeout:"3000",
+                cache:"false",
+                dataType:"json",
+                success:function(dt){
+                    piechar(dt);
+                },
+                error:function(err){
+                    console.log("error");
+                }
+            });
+            function piechar(dt) {
+                    var ser = [{value:dt.stat[0],name:'altertable'},{value:dt.stat[1],name:'renam'},{value:dt.stat[2],name:'createindex'},
+                    {value:dt.stat[3],name:'dropindex'},{value:dt.stat[4],name:'addcolumn'},{value:dt.stat[5],name:'changecolumn'},{value:dt.stat[6],name:'createtable'},
+                    {value:dt.stat[7],name:'truncat'}];
+                    myChart.setOption({
+                        series: [{
+                            // 根据名字对应到相应的系列
+                            name: 'DML比例',
+                            data: ser
+                        }]
+                    })
+            }
+         })
+    </script>
+<script>
+        $(document).ready(function() {
+            var myChart = echarts.init(document.getElementById('main'));
+            myChart.setOption({
+                        title: {
+                            text: '最近7天审核数据'
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            formatter: function (params) {
+                                params = params[0];
+                                console.log(params.data)
+                                var date = new Date(params.name);
+                                return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' : ' + params.data;
+                            },
+                            axisPointer: {
+                                animation: false
+                            }
+                        },
+                        calculable : true,
+                        xAxis: {
+                            type: 'category',
+                            splitLine: {
+                                show: true
+                            },
+                            data: []
+                        },
+                        yAxis: {
+                            type: 'value',
+                            boundaryGap: [0, '100%'],
+                            splitLine: {
+                                show: false
+                            }
+                        },
+                        dataZoom: [{
+                            type: 'inside',
+                            start: 0,
+                            end: 100
+                        }
+                        , {
+                            start: 0,
+                            end: 100,
+                            handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+                            handleSize: '80%',
+                            handleStyle: {
+                                color: '#fff',
+                                shadowBlur: 3,
+                                shadowColor: 'rgba(0, 0, 0, 0.6)',
+                                shadowOffsetX: 2,
+                                shadowOffsetY: 2
+                            }
+                        }],
+                        series: [{
+                            name: 'datastat',
+                            type: 'line',
+                            showSymbol: false,
+                            hoverAnimation: false
+
+                        }],
+                    color:['#dedede']
+                    });
+            $.ajax({
+                url:"{% url 'index_char_line' %}",
+                type:'post',
+                timeout:"3000",
+                cache:"false",
+                dataType:"json",
+                success:function(dt){
+                    linechar(dt);
+                },
+                error:function(err){
+                    console.log("error");
+                }
+            });
+            function linechar(dt) {
+                    var xdata = [dt.stat[0][1],dt.stat[1][1],dt.stat[2][1],dt.stat[3][1],dt.stat[4][1],dt.stat[5][1],dt.stat[6][1]];
+                    var sdata = [dt.stat[0][0],dt.stat[1][0],dt.stat[2][0],dt.stat[3][0],dt.stat[4][0],dt.stat[5][0],dt.stat[6][0]];
+                    myChart.setOption({
+                        xAxis: {
+                            type: 'category',
+                            splitLine: {
+                                show: true
+                            },
+                            data: xdata
+                        },
+                        series: [{
+                            // 根据名字对应到相应的系列
+                            name: 'datastat',
+                            smooth:true,
+                            symbol: 'none',
+                            sampling: 'average',
+                            itemStyle: {
+                                normal: {
+                                    color: '#a3e1d4'
+                                }
+                            },
+                            areaStyle: {
+                                normal: {
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                        offset: 0,
+                                        color: '#a3e1d4'
+                                    }, {
+                                        offset: 1,
+                                        color: '#a3e1d4'
+                                    }])
+                                }
+                            },
+                            data: sdata
+                        }]
+                    })
+            }
+        })
+    </script>
+{% endblock %}
+
+
+

@@ -1,0 +1,205 @@
+{% extends "review/base.html" %}
+{% load static %}
+{% block title %}title name{% endblock %}
+   {% block extrastyle %}
+    <link href="{% static 'css/plugins/datatables/datatables.min.css' %}" rel="stylesheet">
+       <!-- Sweet Alert -->
+       <link href="{% static 'css/plugins/sweetalert/sweetalert02.css' %}" rel="stylesheet">
+    {% endblock %}
+
+{% block bside %}
+    <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element"> <span>
+{#                            <img alt="image" class="img-circle" src="/models/static/img/profile_small.jpg" />#}
+                             </span>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{ user }}</strong>
+                             </span> <span class="text-muted text-xs block"><b class="caret"></b></span> </span> </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+{#                                <li><a href="{% url 'userPofile' %}">Profile</a></li>#}
+{#                                <li class="divider"></li>#}
+                                <li><a href="{% url 'userLogout' %}">Logout123</a></li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                            IN+
+                        </div>
+                    </li>
+                    <li >
+                        <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">主页</span> <span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li><a href="/">仪表盘</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="active">
+                        <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">SQL审核</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li ><a href="{% url 'reviewTemp' %}">临时审核</a></li>
+                            <li ><a href="{% url 'reviewReportListAll' %}">审核列表</a></li>
+                            <li><a href="{% url 'reviewListAllHistory' %}">审核历史列表</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-book"></i> <span class="nav-label">使用示例</span></a>
+                    </li>
+                </ul>
+{% endblock %}
+
+{% block bodyct %}
+          <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2> SQL审核</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="/">主页</a>
+                        </li>
+                        <li>
+                            <a>sql审核</a>
+                        </li>
+                        <li class="active">
+                            <strong>审核详细信息列表</strong>
+                        </li>
+                    </ol>
+                </div>
+                <div class="col-lg-2">
+
+                </div>
+            </div>
+   <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>审核详细信息</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover dataTables-example" >
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>stage</th>
+                        <th>错误级别</th>
+                        <th>审核信息</th>
+                        <th>错误信息</th>
+                        <th>sql</th>
+                        <th>影响数</th>
+                        <th>序列号</th>
+                        <th>备份名称</th>
+                        <th>执行时间</th>
+                        <th>sql_id</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {%  for report in reportlist %}
+                            <tr class="gradeX">
+
+                                <td>{{ report.1 }}</td>
+                                <td>{{ report.2 }}</td>
+                                {% if report.3 == 0 %}
+                                    <td><p><span class="label label-primary">通过</span></p></td>
+                                {% elif report.3 == 1 %}
+                                    <td><p><span class="label label-warning">警告</span></p></td>
+                                {% else %}
+                                    <td><p><span class="label label-danger">危险</span></p></td>
+                                {% endif %}
+                                <td>{{ report.4 }}</td>
+                                <td>{{ report.5 }}</td>
+                                <td>{{ report.6 }}</td>
+                                <td>{{ report.7 }}</td>
+                                <td>{{ report.8 }}</td>
+                                <td>{{ report.9 }}</td>
+                                <td>{{ report.10 }}</td>
+{#                                <td>{{ report.11 }}</td>#}
+                                <td>{{ report.12 }}</td>
+                                {% if 'Execute Successfully' in report.4 and 'EXECUTED' in report.2  %}
+                                      <td><button type='button' class='btn btn-danger btn-sm ' data-title=full[0]  id='execute' ><i class='fa  fa-check' ></i> 执行回滚</button></td>
+                                {% else %}
+                                      <td><button type='button' class='btn btn-danger btn-sm '  disabled="disabled"><i class='fa  fa-check' ></i> 执行回滚</button></td>
+                                {% endif %}
+
+                            </tr>
+                    {% endfor %}
+                    </tbody>
+                    </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+{% endblock %}
+    {% block jscripts %}
+   <!-- Mainly scripts -->
+
+    <script src="{% static 'js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
+    <script src="{% static 'js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+
+
+    <!-- Custom and plugin javascript -->
+    <script src="{% static 'js/inspinia.js' %}"></script>
+    <script src="{% static 'js/plugins/pace/pace.min.js' %}"></script>
+
+    <!-- jQuery UI -->
+    <script src="{% static 'js/plugins/datatables/datatables.min.js' %}"></script>
+     <!-- Sweet alert -->
+    <script src="{% static 'js/plugins/sweetalert/sweetalert-dev.js' %}"></script>
+    <script>
+            $.ajaxSetup({
+                    data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+             });
+
+        var dt = $('.dataTables-example').DataTable({
+                dom: '<"html5buttons"B>lTfgitp',
+                ordering: false,
+                buttons: [
+                    {extend: 'copy'},
+                    {extend: 'csv'},
+                    {extend: 'excel', title: 'ExampleFile'},
+                    {extend: 'pdf', title: 'ExampleFile'},
+                    {extend: 'print',
+                     customize: function (win){
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '10px');
+
+                            $(win.document.body).find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+                    }
+                    }
+                ]
+            });
+
+
+        $('.dataTables-example').on( 'click', 'button#execute', function () {
+                    var data =  dt.row( $(this).parents('tr') ).data();
+                    console.log(data)
+                        $.ajax({
+                            data:{"xlh":data[7],"db_bak":data[8],"sql_id":data[10]},
+                            url:"{% url 'reviewRollBack' %}",
+                            type:'post',
+                            timeout:"3000",
+                            cache:"false",
+                            success:function(str){
+                                swal("回滚完成！");
+                                    //dt.row().remove().draw( false );//删除这行的数据
+                            },
+                            error:function(err){
+                                swal("服务器失败！");
+                            }
+                        });
+                });
+
+    </script>
+
+{% endblock %}
