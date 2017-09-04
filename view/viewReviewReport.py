@@ -10,8 +10,8 @@ from django.db import connections
 from django.contrib.auth.views import login,logout,login_required,auth_login
 from models.models_inception import  information_schema,tb_review,tb_review_history
 import datetime as dtime
-from django.core.mail import send_mail
 
+from baseEmail import sendEmail
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
@@ -26,7 +26,8 @@ yesterday=today-oneday
 
 date = "%s 00:00:00" % (today)
 
-from_email='changyanlong@soyoung.com'
+from_email='sqlaudit@soyoung.com'
+to_email='changyanlong@soyoung.com'
 
 @login_required()
 def reviewReport(request):
@@ -71,14 +72,14 @@ def reviewReportActive(request):
                     review_report = tb_review(database_id=select[i], content=content, creator=userid, flag=0,
                                               review_id=0)
                     review_report.save(using='default')
-                    send_mail(title, message, from_email,
-                              ['changyanlong@soyoung.com'], fail_silently=True)
+                    em = sendEmail(title=title, message=message, from_email=from_email,to_email=to_email)
+                    em.send()
                 return write(1)
             elif leng == 1:
                 review_report = tb_review(database_id=select[0],content=content,creator=userid,flag=0,review_id=0)
                 review_report.save(using='default')
-                send_mail(title, message, from_email=from_email,
-                          recipient_list=['changyanlong@soyoung.com'],fail_silently=True)
+                em = sendEmail(title=title, message=message, from_email=from_email, to_email=to_email)
+                em.send()
                 return write(1)
             else:
                 return write(0)
@@ -112,7 +113,7 @@ def reviewReportList(request):
                     a.remarks
                 FROM
                     tb_review as a left join tb_databases_config as b
-                    on a.database_id=b.auto_id
+                    on a.database_id=b.id
                 WHERE
                     a.creator = {0} and a.create_time>date_format(now(),'%Y-%m-%d 00:00:00')''' .format(userid)
             cursor = connections['default'].cursor()

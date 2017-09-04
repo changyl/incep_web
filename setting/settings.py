@@ -184,9 +184,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = False
 EMAIL_HOST = 'smtp.exmail.qq.com'
 EMAIL_PORT = 25
-EMAIL_HOST_USER = 'changyanlong@soyoung.com'
+EMAIL_HOST_USER = 'sqlaudit@soyoung.com'
 EMAIL_HOST_PASSWORD = 'Cc3200441'
-DEFAULT_FROM_EMAIL = 'changyanlong@soyoung.com'
+DEFAULT_FROM_EMAIL = 'sqlaudit@soyoung.com'
 
 
 #Django Suit配置示例

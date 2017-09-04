@@ -12,7 +12,7 @@ from models.models_inception import  information_schema,tb_databases_config,tb_r
 import datetime as dtime
 import time,collections,json,datetime
 import MySQLdb,sys
-from django.core.mail import send_mail
+from baseEmail import sendEmail
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -160,7 +160,6 @@ def reviewPostHistory(request):
 def reviewActive(request):
     '''审核内容执行'''
     try:
-
         databaseid = int(request.POST.get('id',None))
         content = request.POST.get('content',None)
         creatorid = request.POST.get('creator', None)
@@ -191,20 +190,25 @@ def reviewActive(request):
             cursor.close()
             title = '''SQL审核通知！'''
             message = '''sqlid为{0}的已审核完成！''' .format(sql_id)
-            to_email = ['%s@soyoung.com' % request.user.username]
+            sql_to_eamil = '''select username from auth_user where id= (select creator from tb_review where id=)''' .format(sql_id)
+            cursor = connections['default'].cursor()
+            cursor.execute(sql_to_eamil)
+            re_to_uname = cur.fetchone()
+            to_email = ['%s@soyoung.com' % re_to_uname]
+
             if 2 in flag:
                 sql_flag ='''update tb_review set flag=1,review_id={0},review_time=now() where id={1}'''.format(request.user.id,sql_id)
                 cursor = connections['default'].cursor()
                 cursor.execute(sql_flag)
-                send_mail(title, message, from_email=from_email,
-                        recipient_list =to_email , fail_silently = True)
+                em = sendEmail(title=title, message=message, from_email=from_email, to_email=to_email)
+                em.send()
                 return write(0)
             else:
                 sql_flag_02 = '''update tb_review set flag=2,review_id={0},review_time=now() where id={1}'''.format(request.user.id,sql_id)
                 cursor = connections['default'].cursor()
                 cursor.execute(sql_flag_02)
-                send_mail(title, message, from_email=from_email,
-                          recipient_list=to_email, fail_silently=True)
+                em = sendEmail(title=title, message=message, from_email=from_email, to_email=to_email)
+                em.send()
                 return write(1)
         else:
             req = 0
@@ -239,37 +243,6 @@ def reviewDetail(request):
     except Exception,e:
         logging.error(e)
         return render(request, 'review/404.html', context=None)
-
-
-
-#
-# @login_required()
-# def reviewDetail(request):
-#     '''审核内容详情'''
-#     try:
-#         if request.method == "GET" and request.user.is_superuser == 1:
-#             sql_id = request.GET.get('sqlid',None)
-#             sql_detail_info  =  '''select * from tb_review_detail where sql_id={0}'''.format(sql_id)
-#             cursor = connections['default'].cursor()
-#             cursor.execute(sql_detail_info)
-#             row = cursor.fetchall()
-#             sql_sum = '''select count(*) from tb_review where flag=0 and '''
-#             cursor = connections['default'].cursor()
-#             cursor.execute(sql_sum)
-#             sum_row = cursor.fetchone()
-#             name = request.user.username
-#             dict_report = {}
-#             dict_report['reportlist'] = row
-#             dict_report['taskCount'] = sum_row
-#             dict_report['name'] = name
-#             return render(request, 'review/review_detail.html', context=dict_report)
-#         else:
-#             return render(request, 'review/500.html', context=None)
-#     except Exception,e:
-#         logging.error(e)
-#         return render(request, 'review/404.html', context=None)
-#
-
 
 
 @login_required()
