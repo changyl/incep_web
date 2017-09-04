@@ -2,13 +2,13 @@
 
 incep_web 是基于django框架、以及inception后端审核组成，主要给用户提供一个web界面去操作、展示sql审核的一个平台。
 
-# version
+## version
  	django 1.11.3
  	python 2.7.3
  	inception 2.1.23
  	incep_web 1.0
  
-# 部署
+## 部署
   其中数据库配置依赖于inception的安装位置,用户密码一般是根据设置无需添加，端口可以随着安装时启动的端口设置，具体数据库配置如下
 ## mysql
 ### settings.py
