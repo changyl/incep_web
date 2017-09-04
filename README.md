@@ -60,10 +60,10 @@ DATABASE_ROUTERS = ['setting.databaseRouter.modelsRouter', 'setting.databaseRout
   管理系统入口就是django自带的后端管理,只需要在url后加admin：
   http://127.0.0.1:8080/admin
   
-## 首页登录实例图
+## 登录效果图
 ![](https://github.com/changyl/incep_web/blob/master/models/static/img/1.png)
 
 
-## 仪表盘
+## 仪表盘效果图
 ![](https://github.com/changyl/incep_web/blob/master/models/static/img/2.png)
 ![](https://github.com/changyl/incep_web/blob/master/models/static/img/3.png)
