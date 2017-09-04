@@ -1,6 +1,6 @@
 # incep_web
 
-incep_web 是基于django框架、以及inception后端审核组成，主要给用户提供一个web界面去操作、展示sql审核的一个平台。
+incep_web 是基于django框架、以及去哪网开源的inception后端审核组成，主要给用户提供一个web界面去操作、展示sql审核的一个平台。
 
 ## version
  	django 1.11.3
