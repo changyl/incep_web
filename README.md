@@ -11,6 +11,7 @@ incep_web 是基于django框架、以及inception后端审核组成，主要给�
 # 部署
   其中数据库配置依赖于inception的安装位置,用户密码一般是根据设置无需添加，端口可以随着安装时启动的端口设置，具体数据库配置如下
 ## mysql
+### settings.py
 ```DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # 或者使用 mysql.connector.django 、
@@ -38,6 +39,11 @@ incep_web 是基于django框架、以及inception后端审核组成，主要给�
     }
 
 }
+
+DATABASE_ROUTERS = ['setting.databaseRouter.modelsRouter', 'setting.databaseRouter.ReportRouter','setting.databaseRouter.ExecuteRoutor']
+
+### databaseRouter.py
+  添加新的数据库时也需要在此文件添加具体权限信息
 ```
 
 ## 邮箱配置
@@ -49,5 +55,12 @@ incep_web 是基于django框架、以及inception后端审核组成，主要给�
 	DEFAULT_FROM_EMAIL = '446591512@qq.com'
 ## debug
 	DEBUG = False
+	
+## amdin管理系统的配置
+  管理系统入口就是django自带的后端管理,只需要在url后加admin：
+  http://127.0.0.1:8080/amdin
+  
+# 首页登录
+
 
 
