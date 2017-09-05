@@ -3,3 +3,11 @@ Mon, 04 Sep 2017 18:45:53 viewReviewReport.py[line:82] INFO <view.baseEmail.send
 Mon, 04 Sep 2017 18:45:54 viewReviewReport.py[line:90] ERROR (535, 'Error: authentication failed, system busy')
 Mon, 04 Sep 2017 18:48:51 viewReviewReport.py[line:82] INFO <view.baseEmail.sendEmail instance at 0x00000000042F5AC8>
 Mon, 04 Sep 2017 18:50:07 viewReviewReport.py[line:82] INFO <view.baseEmail.sendEmail instance at 0x00000000043A15C8>
+Mon, 04 Sep 2017 19:31:12 viewReview.py[line:172] DEBUG select host,user,passwd,port,db_name,creator from tb_databases_config where id=0
+Mon, 04 Sep 2017 19:31:12 viewReview.py[line:178] DEBUG /*--user=inception;--password=cyl_young;--host=172.16.16.29;--execute=1;--enable-ignore-warnings;--port=3306;*/inception_magic_start;use db_browse_log;test; inception_magic_commit;
+Mon, 04 Sep 2017 19:32:30 viewReview.py[line:172] DEBUG select host,user,passwd,port,db_name,creator from tb_databases_config where id=0
+Mon, 04 Sep 2017 19:32:30 viewReview.py[line:178] DEBUG /*--user=inception;--password=cyl_young;--host=172.16.16.29;--execute=1;--enable-ignore-warnings;--port=3306;*/inception_magic_start;use db_browse_log;test; inception_magic_commit;
+Mon, 04 Sep 2017 19:33:46 viewReview.py[line:172] DEBUG select host,user,passwd,port,db_name,creator from tb_databases_config where id=0
+Mon, 04 Sep 2017 19:33:46 viewReview.py[line:178] DEBUG /*--user=inception;--password=cyl_young;--host=172.16.16.29;--execute=1;--enable-ignore-warnings;--port=3306;*/inception_magic_start;use db_browse_log;test; inception_magic_commit;
+Mon, 04 Sep 2017 19:35:17 viewReview.py[line:172] DEBUG select host,user,passwd,port,db_name,creator from tb_databases_config where id=0
+Mon, 04 Sep 2017 19:35:17 viewReview.py[line:178] DEBUG /*--user=inception;--password=cyl_young;--host=172.16.16.29;--execute=1;--enable-ignore-warnings;--port=3306;*/inception_magic_start;use db_browse_log;test; inception_magic_commit;

@@ -189,34 +189,32 @@ def reviewActive(request):
                 cursor.execute(sql)
             cursor.close()
             title = '''SQL审核通知！'''
-            message = '''sqlid为{0}的已审核完成！''' .format(sql_id)
-            sql_to_eamil = '''select username from auth_user where id= (select creator from tb_review where id=)''' .format(sql_id)
+            falis_message = '''sqlid为{0}的审核未通过！''' .format(sql_id)
+            suss_message = '''sqlid为{0}的已审核通过！''' .format(sql_id)
+            sql_to_eamil = '''select username from auth_user where id= (select creator from tb_review where id={0})''' .format(sql_id)
             cursor = connections['default'].cursor()
             cursor.execute(sql_to_eamil)
-            re_to_uname = cur.fetchone()
+            re_to_uname = cursor.fetchone()
             to_email = ['%s@soyoung.com' % re_to_uname]
-
             if 2 in flag:
-                sql_flag ='''update tb_review set flag=1,review_id={0},review_time=now() where id={1}'''.format(request.user.id,sql_id)
+                sql_flag ='''update tb_review set flag=1,review_id={0},review_time=now() where id={1}''' .format(request.user.id,sql_id)
                 cursor = connections['default'].cursor()
                 cursor.execute(sql_flag)
-                em = sendEmail(title=title, message=message, from_email=from_email, to_email=to_email)
+                em = sendEmail(title=title, message=suss_message, from_email=from_email, to_email=to_email)
                 em.send()
                 return write(0)
             else:
                 sql_flag_02 = '''update tb_review set flag=2,review_id={0},review_time=now() where id={1}'''.format(request.user.id,sql_id)
                 cursor = connections['default'].cursor()
                 cursor.execute(sql_flag_02)
-                em = sendEmail(title=title, message=message, from_email=from_email, to_email=to_email)
+                em = sendEmail(title=title, message=falis_message, from_email=from_email, to_email=to_email)
                 em.send()
                 return write(1)
         else:
-            req = 0
-            return write(req)
+            return write(0)
     except Exception,e:
         logging.error(e)
-        req = 0
-        return write(req)
+        return write(0)
 
 @login_required()
 def reviewDetail(request):
