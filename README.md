@@ -16,17 +16,17 @@ incep_web 是基于django框架、以及去哪网开源的inception后端审核�
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # 或者使用 mysql.connector.django 、
         'NAME': 'auto_database',     #主要数据库，存储审核的sql和数据库信息
-        'USER': 'cyl',
-        'PASSWORD': 'cyl_young',
-        'HOST':'172.16.16.29',
+        'USER': ',
+        'PASSWORD': '',
+        'HOST':'',
         'PORT':'3306',
     },
     'data_backup': {
         'ENGINE': 'django.db.backends.mysql',  # 或者使用 mysql.connector.django
         'NAME': 'inception',     #存储备份数据库信息
-        'USER': 'incep_stat',
-        'PASSWORD': 'cyl_soyoung',
-        'HOST':'172.16.16.20',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST':'',
         'PORT':'3306',
     },
     'review': {
@@ -34,7 +34,7 @@ incep_web 是基于django框架、以及去哪网开源的inception后端审核�
         'NAME': '',   #执行sql审核后端审核服务，我的具体备份也放在inception同一台机器,如果不是同一台需添加新的备份机器
         'USER': 'root',
         'PASSWORD': '',
-        'HOST':'172.16.16.20',
+        'HOST':'',
         'PORT':'6669',
     }
 
