@@ -10,7 +10,7 @@ from django.db import connections
 from django.contrib.auth.views import login,logout,login_required,auth_login
 from models.models_inception import  information_schema,tb_review,tb_review_history
 import datetime as dtime
-
+from baseTools import getUserInfoReport,getUserInfoReport_02
 from baseEmail import sendEmail
 
 logging.basicConfig(level=logging.DEBUG,
@@ -34,20 +34,8 @@ def reviewReport(request):
     '''审核内容上报'''
     try:
         if request.method == "GET" and request.user.is_superuser == 0:
-            username = request.user.username
-            sql_sum = '''select count(*) from tb_review where flag=1 and create_time >date_format(now(),'%Y-%m-%d 00:00:00') '''
-            cursor = connections['default'].cursor()
-            cursor.execute(sql_sum)
-            sum_row = cursor.fetchone()
-            sql_sum = '''select id,db_tag from tb_databases_config'''
-            cursor = connections['default'].cursor()
-            cursor.execute(sql_sum)
-            datarows = cursor.fetchall()
-            dict_report = {}
-            dict_report['user'] = username
-            dict_report['taskCount'] = sum_row
-            dict_report['database'] = datarows
-            return render(request, 'review/report.html', context=dict_report)
+            result = getUserInfoReport(username=request.user.username)
+            return render(request, 'review/report.html', context=result)
         else:
             return render(request, 'review/404.html',context=None)
     except Exception,e:
@@ -98,32 +86,8 @@ def reviewReportList(request):
         print request.method
         if request.method == "GET" and request.user.is_superuser == 0:
             userid = request.user.id
-            username = request.user.username
-            sql_sum = '''select count(*) from tb_review where flag=1 and create_time>date_format(now(),'%Y-%m-%d 00:00:00')'''
-            cursor = connections['default'].cursor()
-            cursor.execute(sql_sum)
-            sum_row = cursor.fetchone()
-            sql = '''SELECT 
-                    a.id,
-                    b.db_name,
-                    a.content,
-                    a.create_time,
-                    a.flag,
-                    a.review_time,
-                    a.remarks
-                FROM
-                    tb_review as a left join tb_databases_config as b
-                    on a.database_id=b.id
-                WHERE
-                    a.creator = {0} and a.create_time>date_format(now(),'%Y-%m-%d 00:00:00')''' .format(userid)
-            cursor = connections['default'].cursor()
-            cursor.execute(sql)
-            row = cursor.fetchall()
-            dict_report = {}
-            dict_report['reportlist'] = row
-            dict_report['user'] = username
-            dict_report['taskCount'] = sum_row
-            return render(request, 'review/report_list.html', context=dict_report)
+            result = getUserInfoReport_02(userid=userid,username=request.user.username)
+            return render(request, 'review/report_list.html', context=result)
         else:
             return render(request, 'review/404.html', context=None)
     except Exception,e:
@@ -166,7 +130,6 @@ def reportUpdatePost(request):
         if request.method == "POST" and request.user.is_superuser == 0:
             sid = request.POST.get('sid',None)
             content = request.POST.get('text',None)
-            print "%s,%s" % (sid,content)
             ct = tb_review.objects.get(id=sid)
             ct.content=content
             ct.flag=0

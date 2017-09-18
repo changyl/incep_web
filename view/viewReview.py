@@ -8,12 +8,12 @@ import logging
 from django.db.transaction import atomic
 from django.db import connections
 from django.contrib.auth.views import login,logout,login_required,auth_login
-from models.models_inception import  information_schema,tb_databases_config,tb_review,tb_review_history
+from models.models_inception import  tb_databases_config,tb_review,tb_review_history
 import datetime as dtime
 import time,collections,json,datetime
 import sys
 from baseEmail import sendEmail
-from baseTools import auditActive,inceptionQuery
+from baseTools import auditActive,inceptionQuery,getUserInfo,getUserInfo_02
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -43,15 +43,8 @@ def reviewReportListAll(request):
     '''所有审核内容上报列表'''
     try:
         if request.method == "GET" and request.user.is_superuser == 1:
-            name = request.user.username
-            sql_sum = '''select count(*) from tb_review where flag=0 and create_time >date_format(now(),'%Y-%m-%d 00:00:00')'''
-            cursor = connections['default'].cursor()
-            cursor.execute(sql_sum)
-            sum_row = cursor.fetchone()
-            dict = {}
-            dict['name'] = name
-            dict['taskCount'] = sum_row
-            return render(request, 'review/review_list_all.html', context=dict)
+            result = getUserInfo(username=request.user.username)
+            return render(request, 'review/review_list_all.html', context=result)
         else:
             return render(request, 'review/404.html', context=None)
     except Exception,e:
@@ -76,11 +69,11 @@ def reviewPost(request):
             cursor.execute(sql_sum)
             sum_row = cursor.fetchone()
             sql_arry = '''select t.id,d.db_name,t.database_id,t.content,t.flag,t.create_time,t.username,t.remarks from (SELECT r.id as id,database_id,content,create_time ,u.username,r.flag,r.remarks  FROM  tb_review as r left join auth_user as u ON r.creator=u.id where  r.create_time>date_format(now(),'%Y-%m-%d 00:00:00') ) as t left join tb_databases_config d on t.database_id=d.id  order by t.id desc  limit {0},{1};''' .format(start,length)
-            print sql_arry
+
             cursor = connections['default'].cursor()
             cursor.execute(sql_arry)
             all_row = cursor.fetchall()
-            print all_row
+
             dict = collections.OrderedDict()
             dict['draw'] = draw
             dict['recordsTotal'] = sum_row[0]
@@ -102,14 +95,7 @@ def reviewListAllHistory(request):
     '''所有审核内容上报历史'''
     try:
         if request.method == "GET" and request.user.is_superuser == 1:
-            name = request.user.username
-            sql_sum = '''select count(*) from tb_review where flag=0 and create_time >date_format(now(),'%Y-%m-%d 00:00:00')'''
-            cursor = connections['default'].cursor()
-            cursor.execute(sql_sum)
-            sum_row = cursor.fetchone()
-            dict = {}
-            dict['name'] = name
-            dict['taskCount'] = sum_row
+            result = getUserInfo(username=request.user.username)
             return render(request, 'review/review_history.html', context=dict)
         else:
             return render(request, 'review/404.html', context=None)
@@ -135,7 +121,6 @@ def reviewPostHistory(request):
             cursor.execute(sql_sum)
             sum_row = cursor.fetchone()
             sql_arry = '''SELECT t.id,t.name,t.db_name,t.content,t.flag,t.review_time, uu.username  FROM (SELECT  u.username as name, d.db_name,  r.id,r.content,  r.flag, r.remarks, r.review_time, r.review_id FROM auto_database.tb_review r, tb_databases_config d, auth_user u  WHERE r.database_id = d.id AND r.creator = u.id and r.create_time <date_format(now(),'%Y-%m-%d 00:00:00')) AS t LEFT JOIN auth_user uu ON t.review_id = uu.id order by t.id desc  limit {0},{1}''' .format(start,length)
-            print sql_arry
             cursor = connections['default'].cursor()
             cursor.execute(sql_arry)
             all_row = cursor.fetchall()
@@ -145,7 +130,6 @@ def reviewPostHistory(request):
             dict['recordsFiltered'] = sum_row[0]
             dict['data'] = all_row
             json_object = json.dumps(dict,cls=DateEncoder)
-            print json_object
             return write(json_object)
         else:
             return render(request, 'review/404.html', context=None)
@@ -216,19 +200,7 @@ def reviewDetail(request):
     try:
         if request.method == "GET" and request.user.is_superuser == 1:
             sql_id = request.GET.get('sqlid',None)
-            sql_detail_info  =  '''select * from tb_review_detail where sql_id={0}'''.format(sql_id)
-            cursor = connections['default'].cursor()
-            cursor.execute(sql_detail_info)
-            row = cursor.fetchall()
-            sql_sum = '''select count(*) from tb_review where flag=0 and create_time>date_format(now(),'%Y-%m-%d 00:00:00')'''
-            cursor = connections['default'].cursor()
-            cursor.execute(sql_sum)
-            sum_row = cursor.fetchone()
-            name = request.user.username
-            dict_report = {}
-            dict_report['reportlist'] = row
-            dict_report['taskCount'] = sum_row
-            dict_report['name'] = name
+            dict_report = getUserInfo_02(username=request.user.username,sql_id=sql_id)
             return render(request, 'review/review_detail.html', context=dict_report)
         else:
             return render(request, 'review/500.html', context=None)

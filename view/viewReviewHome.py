@@ -107,6 +107,7 @@ def index_char_pie_ddl(request):
             cursor = connections['data_backup'].cursor()
             cursor.execute(sql_stat)
             sum_stat = cursor.fetchone()
+            print sum_stat
             dict = collections.OrderedDict()
             dict['stat'] = sum_stat
             json_object = json.dumps(dict, cls=DecimalEncoder)

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
-import logging,sys,MySQLdb
-
+import logging,sys,MySQLdb,collections
+from django.db import connections
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -46,3 +46,81 @@ def inceptionQuery(main_sql):
     result = cur.fetchall()
     logging.info('test')
     return result
+
+
+def getUserInfo(username):
+    sql_sum = '''select count(*) from tb_review where flag=0 and create_time >date_format(now(),'%Y-%m-%d 00:00:00')'''
+    cursor = connections['default'].cursor()
+    cursor.execute(sql_sum)
+    sum_row = cursor.fetchone()
+    dict = {}
+    dict['name'] = username
+    dict['taskCount'] = sum_row
+    return dict
+
+
+def getUserInfo_02(username,sql_id):
+    sql_detail_info = '''select * from tb_review_detail where sql_id={0}'''.format(sql_id)
+    cursor = connections['default'].cursor()
+    cursor.execute(sql_detail_info)
+    row = cursor.fetchall()
+    sql_sum = '''select count(*) from tb_review where flag=0 and create_time>date_format(now(),'%Y-%m-%d 00:00:00')'''
+    cursor = connections['default'].cursor()
+    cursor.execute(sql_sum)
+    sum_row = cursor.fetchone()
+    dict_report = {}
+    dict_report['reportlist'] = row
+    dict_report['taskCount'] = sum_row
+    dict_report['name'] = username
+    return  dict_report
+
+
+
+def getUserInfoReport(username):
+    """
+    :param username:
+    :return: dict
+    :author: changyl
+    :desc: 返回用户信息,包括单选列表
+    """
+    sql_sum = '''select count(*) from tb_review where flag=1 and create_time >date_format(now(),'%Y-%m-%d 00:00:00') '''
+    cursor = connections['default'].cursor()
+    cursor.execute(sql_sum)
+    sum_row = cursor.fetchone()
+    sql_sum = '''select id,db_tag from tb_databases_config'''
+    cursor = connections['default'].cursor()
+    cursor.execute(sql_sum)
+    datarows = cursor.fetchall()
+    dict_report = {}
+    dict_report['user'] = username
+    dict_report['taskCount'] = sum_row
+    dict_report['database'] = datarows
+    return dict_report
+
+
+def getUserInfoReport_02(userid,username):
+    sql_sum = '''select count(*) from tb_review where flag=1 and create_time>date_format(now(),'%Y-%m-%d 00:00:00')'''
+    cursor = connections['default'].cursor()
+    cursor.execute(sql_sum)
+    sum_row = cursor.fetchone()
+    sql = '''SELECT 
+                        a.id,
+                        b.db_name,
+                        a.content,
+                        a.create_time,
+                        a.flag,
+                        a.review_time,
+                        a.remarks
+                    FROM
+                        tb_review as a left join tb_databases_config as b
+                        on a.database_id=b.id
+                    WHERE
+                        a.creator = {0} and a.create_time>date_format(now(),'%Y-%m-%d 00:00:00')'''.format(userid)
+    cursor = connections['default'].cursor()
+    cursor.execute(sql)
+    row = cursor.fetchall()
+    dict_report = {}
+    dict_report['reportlist'] = row
+    dict_report['user'] = username
+    dict_report['taskCount'] = sum_row
+    return dict_report
