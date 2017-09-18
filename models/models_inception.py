@@ -33,8 +33,8 @@ class tb_review(models.Model):
     flag = models.IntegerField(u'是否通过', )
     review_id = models.IntegerField(u'审核人ID', )
     review_time = models.DateTimeField(u'审核通过时间',)
-    remarks =   models.CharField(u'备注信息',max_length=512)
-    #is_review = models.IntegerField(u'是否已审核',)
+    remarks = models.CharField(u'备注信息',max_length=512)
+    remark_user = models.CharField(u'用户备注信息',max_length=512)
     class Meta:
         verbose_name = '审核表'
         verbose_name_plural = '审核表'

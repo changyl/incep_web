@@ -4,10 +4,10 @@ from __future__ import unicode_literals
 
 from django.http import HttpResponse as write
 from django.shortcuts import render,get_object_or_404,get_list_or_404,redirect
-import logging
+import logging,sys
 from django.db.transaction import atomic
 from django.db import connections
-from django.contrib.auth.views import login,logout,login_required,auth_login
+from django.contrib.auth.views import login_required
 from models.models_inception import  information_schema,tb_review,tb_review_history
 import datetime as dtime
 from baseTools import getUserInfoReport,getUserInfoReport_02
@@ -20,11 +20,9 @@ logging.basicConfig(level=logging.DEBUG,
                     filemode='a')
 
 
-today=dtime.date.today()
-oneday=dtime.timedelta(days=1)
-yesterday=today-oneday
+reload(sys)
+sys.setdefaultencoding('utf8')
 
-date = "%s 00:00:00" % (today)
 
 from_email='sqlaudit@soyoung.com'
 to_email='changyanlong@soyoung.com'
@@ -51,32 +49,29 @@ def reviewReportActive(request):
             # 1、获取上报内容
             select = request.POST.getlist('select[]',None)
             content = request.POST.get('text',None)
+            bak = request.POST.get('text2',None)
             userid = request.user.id
             leng = len(select)
             title = '''SQL审核通知！'''
             message = '''用户{0}已提交新的SQL，请尽快审核！'''.format(request.user.username)
             if leng > 1:
                 for i in range(len(select)):
-                    review_report = tb_review(database_id=select[i], content=content, creator=userid, flag=0,
+                    review_report = tb_review(database_id=select[i], content=content,remark_user=bak, creator=userid, flag=0,
                                               review_id=0)
                     review_report.save(using='default')
                     em = sendEmail(title=title, message=message, from_email=from_email,to_email=to_email)
                     em.send()
                 return write(1)
             elif leng == 1:
-                review_report = tb_review(database_id=select[0],content=content,creator=userid,flag=0,review_id=0)
+                review_report = tb_review(database_id=select[0],content=content,remark_user=bak,creator=userid,flag=0,review_id=0)
                 review_report.save(using='default')
                 em = sendEmail(title=title, message=message, from_email=from_email, to_email=to_email)
                 em.send()
                 return write(1)
             else:
                 return write(0)
-        else:
-            return render(request, 'review/404.html', context=None)
     except Exception, e:
         logging.error(e)
-        req = 0
-        return write(req)
 
 
 @login_required()
@@ -95,6 +90,8 @@ def reviewReportList(request):
         return render(request, 'review/500.html',context=None)
 
 
+
+
 @login_required()
 def reportUpdate(request):
     '''审核内容上报列表'''
@@ -106,7 +103,7 @@ def reportUpdate(request):
             cursor = connections['default'].cursor()
             cursor.execute(sql_sum)
             sum_row = cursor.fetchone()
-            sql_content = '''select id,content from tb_review where id = {0}''' .format(sql_id)
+            sql_content = '''select id,content,remark_user from tb_review where id = {0}''' .format(sql_id)
             cursor = connections['default'].cursor()
             cursor.execute(sql_content)
             content = cursor.fetchone()
@@ -130,8 +127,10 @@ def reportUpdatePost(request):
         if request.method == "POST" and request.user.is_superuser == 0:
             sid = request.POST.get('sid',None)
             content = request.POST.get('text',None)
+            bak = request.POST.get('bak',None)
             ct = tb_review.objects.get(id=sid)
             ct.content=content
+            ct.remark_user=bak
             ct.flag=0
             ct.save()
             return write(1)
@@ -155,7 +154,7 @@ def reviewReportHistory(request):
             cursor = connections['default'].cursor()
             cursor.execute(sql_sum)
             sum_row = cursor.fetchone()
-            sql = '''SELECT a.id,b.db_name,a.content,a.create_time,a.flag,a.review_time,a.remarks  FROM  tb_review a 
+            sql = '''SELECT a.id,b.db_name,a.content,a.create_time,a.flag,a.review_time,a.remarks,a.remark_user  FROM  tb_review a 
                     left join tb_databases_config as b on a.database_id=b.auto_id WHERE
                     a.creator={0}  and a.create_time<date_format(now(),'%Y-%m-%d 00:00:00') '''.format(
                 userid)

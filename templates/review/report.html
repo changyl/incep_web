@@ -98,6 +98,10 @@
                             <textarea id="text" name="text" rows="5" class="col-md-5" ></textarea>
                          </div>
                          <div class="hr-line-dashed"></div>
+                        <label for="name">备注:</label>
+                         <div class="form-group">
+                            <textarea id="bak" name="text" rows="5" class="col-md-12" ></textarea>
+                         </div>
                          <div class="form-group">
                                     <div class="col-sm-4 col-sm-offset-2">
                                         <button class="btn btn-white" type="submit">重置</button>
@@ -176,7 +180,9 @@
                   var select = $("#select").val();
                   //var text = $(".CodeMirror-code").val();
                   var text = editor_two.getValue();
-                  var data = {"select": select, "text": text};
+                  var text2 = $("#bak").val();
+                  var data = {"select": select, "text": text,"text2":text2};
+                  console.log(data)
                     swal({
                       title: "",
                       text: "",
@@ -185,8 +191,7 @@
                       showCancelButton: true,
                       confirmButtonText: "提交",
                       cancelButtonText: "取消",
-                      closeOnConfirm: true,
-
+                      closeOnConfirm: true
                     },
 
                     function(isConfirm){

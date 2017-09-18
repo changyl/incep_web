@@ -102,6 +102,7 @@
                                     <th >审核状态</th>
                                     <th >审核时间</th>
                                     <th >审核人</th>
+                                    <th >备注信息</th>
                                     <th >操作</th>
                                 </tr>
                             </thead>
@@ -220,6 +221,7 @@
                         { data: 4 },
                         { data: 5 },
                         { data: 6 },
+                        { data: 7 },
                         { data: null }
                     ],
                 language: {
@@ -252,7 +254,7 @@
                                 return "<p><span class='label label-success'>已通过</span></p>";
                               }
                 },{
-                    targets: 7,//编辑
+                    targets: 8,//编辑
                     data: null,//下面这行，添加了编辑按钮和，删除按钮
                     //defaultContent:"<button type='button' class='btn btn-primary btn-sm' data-toggle='modal' data-target='#myModal'><i class='fa  fa-edit'></i>修改</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type='button' class='btn btn-danger btn-sm' data-toggle='modal' data-target='#myModal'><i class='fa  fa-trash'></i>删除</button>"
                     //defaultContent: "<button id='editrow' class='btn btn-primary' type='button' style='margin-right:10px;'>编辑</button><button id='delrow' class='btn btn-primary' type='button'>删除</button>"
@@ -261,93 +263,6 @@
                               }
                 }]
             });
-
-            //执行审核
-                $('#table_server tbody').on( 'click', 'button#execute', function () {
-                    alert("test");
-                    var data = tables.row( $(this).parents('tr') ).data();
-
-                        $.ajax({
-                            data:{"sqlid":data[0],"id":data[1],"content":data[2],"creator":data[4]},
-                            url:"{% url 'reviewActive' %}",
-                            type:'post',
-                            timeout:"3000",
-                            cache:"false",
-                            success:function(str){
-                                alert("审核成功！");
-                                    tables.row().remove().draw( false );//删除这行的数据
-                            },
-                            error:function(err){
-                                alert("审核失败！");
-                            }
-                        });
-
-                });
-
-
-                //数据交互修改
-            //$('#table_server tbody').on( 'click', 'button#update', function () {
-            $(document).delegate(".modal-dialog .btn.btn-primary","click",function(){
-                _xsrf = getCookie("_xsrf");
-                var id = $("#id").val();
-                var name = $("#name").val();
-                var host = $("#host").val();
-                var port = $("#port").val();
-                var type = $("#type").val();
-                var userid = $("#userid").attr("value");
-
-                //data = $(".form-horizontal").serialize();
-                var data = {"id":id,"name":name,"host":host,"port":port,"type":type,"uid":userid,"_xsrf":_xsrf};
-
-                $.ajax({
-                            data:data,
-                            url:"/database/update",
-                            type:'post',
-                            dataType:"json",
-                            timeout:"3000",//设置不对，可能造成数据传输失败
-                            cache:"false",
-                            success:function(str){
-                                    if (str=="1"){
-                                    alert("1")
-                                        //$("#msg").val("更新失败！");
-                                        //$("#success").modal();
-                                        //$('#myModal').modal("hide");
-                                        //tables.row().reupdate().draw( false );
-
-                                    }else{
-                                        alert("0")
-                                        $("#msg").val("更新成功！");
-                                        $("#success").modal();
-                                        $('#myModal').modal("hide");
-                                        tables.draw( false );//删除这行的数据
-                                    }
-                            },
-                            error:function(err){
-                                alert("更新失败！");
-                            }
-                        });
-                });
-
-                //自定义的删除按钮事件
-                $('#table_server tbody').on( 'click', 'button#query', function () {
-                    var data = tables.row( $(this).parents('tr') ).data();
-
-                        $.ajax({
-                            data:{"id":data.database_id,"_xsrf":_xsrf},
-                            url:"/database/show",
-                            type:'delete',
-                            timeout:"3000",
-                            cache:"false",
-                            success:function(str){
-                                alert("删除成功！")
-                                    tables.row().remove().draw( false );//删除这行的数据
-                            },
-                            error:function(err){
-                                alert("删除失败！");
-                            }
-                        });
-
-                });
     });
 
     </script>

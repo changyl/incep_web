@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.DEBUG,
                     filemode='a')
 
 
-def auditActive(user,password,host,port,dbname,content):
+def auditExecute(user,password,host,port,dbname,content):
     """
     :param user:
     :param password:
@@ -34,6 +34,26 @@ def auditActive(user,password,host,port,dbname,content):
     return main_sql
 
 
+
+def preAuditExecute(user,password,host,port,dbname,content):
+    """
+    :param user:
+    :param password:
+    :param host:
+    :param port:
+    :param dbname:
+    :param content:
+    :return: sql
+    :desc:拼接具体审核的sql格式
+    :author:changyl
+    """
+    target_sql = '''/*--user={0};--password={1};--host={2};--enable-check;--port={3};*/'''.format(user,password,host,port)
+    db_sql = '''use {0};'''.format(dbname)
+    ddl_dml_sql = '''{0}''' .format(content)
+
+    main_sql = '''{0}inception_magic_start;{1}{2} inception_magic_commit;'''.format(target_sql,db_sql,ddl_dml_sql)
+    return main_sql
+
 def inceptionQuery(main_sql):
     """
     :param main_sql:
@@ -45,7 +65,6 @@ def inceptionQuery(main_sql):
     cur = conn.cursor()
     cur.execute(main_sql.encode('utf-8'))
     result = cur.fetchall()
-    logging.info('test')
     return result
 
 
@@ -111,7 +130,8 @@ def getUserInfoReport_02(userid,username):
                         a.create_time,
                         a.flag,
                         a.review_time,
-                        a.remarks
+                        a.remarks,
+                        a.remark_user
                     FROM
                         tb_review as a left join tb_databases_config as b
                         on a.database_id=b.id

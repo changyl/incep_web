@@ -93,6 +93,7 @@
                                     <th >上报时间</th>
                                     <th >上报人</th>
                                     <th style="color: #676a6c">审核信息</th>
+                                    <th style="color: #676a6c">审核信息</th>
                                     <th >操作</th>
                                 </tr>
                             </thead>
@@ -197,6 +198,7 @@
                         { data: 5 },
                         { data: 6 },
                         { data: 7 },
+                        { data: 8 },
                         { data: null }
                     ],
                 language: {
@@ -233,14 +235,35 @@
                     }
                     },
                     {sClass:"col_class","aTargets":[7]},
+                    {sClass:"col2_class","aTargets":[8]},
                     {
-                    targets: 8,//编辑
+                    targets: 9,//编辑
                     data: null,//下面这行，添加了编辑按钮和，删除按钮
                     render: function (data, type, full) {
-                              return "<button type='button' class='btn btn-warning btn-sm ' id='execute' data-title=" + full[0] + "  data-toggle='modal' ><i class='fa  fa-check'></i> 执行审核</button>&nbsp;<a type='button' href='/review/v1.0/review/detail/?sqlid="+data[0]+"' class='btn btn-info btn-sm' id='query'><i class='fa  fa-eye'></i> 审核结果</a>&nbsp;<button type='button'  class='btn btn-primary btn-sm' id='update' ><i class='fa  fa-edit'></i> 错误备注</button>"
+                              return "<button type='button' class='btn btn-warning btn-sm ' id='preexecute' data-title=" + full[0] + "  data-toggle='modal' ><i class='fa  fa-check'></i> 预审核</button>&nbsp;<button type='button' class='btn btn-danger btn-sm ' id='execute' data-title=" + full[0] + "  data-toggle='modal' ><i class='fa  fa-check'></i> 执行审核</button>&nbsp;<a type='button' href='/review/v1.0/review/detail/?sqlid="+data[0]+"' class='btn btn-info btn-sm' id='query'><i class='fa  fa-eye'></i> 审核结果</a>&nbsp;<button type='button'  class='btn btn-primary btn-sm' id='update' ><i class='fa  fa-edit'></i> 错误备注</button>"
                               }
                 }]
             });
+
+            //执行预审核
+                $('#table_server tbody').on( 'click', 'button#preexecute', function () {
+                    var data = tables.row( $(this).parents('tr') ).data();
+                        $.ajax({
+                            data:{"sqlid":data[0],"id":data[2],"content":data[3],"creator":data[5]},
+                            url:"{% url 'reviewPreExecute' %}",
+                            type:'post',
+                            timeout:"30000",
+                            cache:"false",
+                            async:"true",
+                            success:function(str){
+                                swal("预审核完成，可点击审核结果查看详细信息！");
+                                    tables.row().remove().draw( false );//删除这行的数据
+                            },
+                            error:function(err){
+                                swal("服务器失败！");
+                            }
+                        });
+                });
 
             //执行审核
                 $('#table_server tbody').on( 'click', 'button#execute', function () {
@@ -253,10 +276,11 @@
                         {
                         $.ajax({
                             data:{"sqlid":data[0],"id":data[2],"content":data[3],"creator":data[5]},
-                            url:"{% url 'reviewActive' %}",
+                            url:"{% url 'reviewExecute' %}",
                             type:'post',
                             timeout:"30000",
                             cache:"false",
+                            async:"true",
                             success:function(str){
                                 swal("审核完成！");
                                     tables.row().remove().draw( false );//删除这行的数据
@@ -327,6 +351,12 @@
 <style>
     .col_class{
                 color:#cd0a0a;
+            }
+            .cos_class{
+                color:#F5F683;
+            }
+    .col2_class{
+                color:#FF9D00;
             }
             .cos_class{
                 color:#F5F683;

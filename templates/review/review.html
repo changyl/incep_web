@@ -155,7 +155,7 @@
             }
     </script>
 
-        <script>
+    <script>
              $.ajaxSetup({
                     data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
              });
@@ -166,8 +166,6 @@
                   var text = $("#text").val();
 
                   var data = {"select": select, "text": text};
-                    console.log(data);
-
                   $.ajax({
                       type: "post",
                       url: "{% url 'reviewTempActive' %}",
@@ -192,6 +190,6 @@
             }  
               
               
-        </script>
+    </script>
 
 {% endblock %}

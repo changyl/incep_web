@@ -88,6 +88,10 @@
                             <textarea id="text" rows="5" class="col-md-5" >{{ content.1 }}</textarea>
 
                          <div class="hr-line-dashed"></div>
+                         <label for="name">备注:</label>
+                         <div class="form-group">
+                            <textarea id="bak" name="text" rows="5" class="col-md-12" >{{ content.2 }}</textarea>
+                         </div>
                          <div class="form-group">
                                     <div class="col-sm-4 col-sm-offset-2">
                                         <button class="btn btn-white" type="submit">重置</button>
@@ -168,7 +172,8 @@
               $("#report").click(function () {
                   var sid = $("#sid").val();
                   var text = editor_two.getValue();
-                  var data = { "sid":sid,"text": text};
+                  var text2 = $("#bak").val();
+                  var data = { "sid":sid,"text": text,"bak":text2};
                     swal({
                       title: "",
                       text: "",
@@ -177,7 +182,7 @@
                       showCancelButton: true,
                       confirmButtonText: "提交",
                       cancelButtonText: "取消",
-                      closeOnConfirm: true,
+                      closeOnConfirm: true
                     },
                     function(isConfirm){
                         if (isConfirm) {

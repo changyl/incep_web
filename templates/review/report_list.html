@@ -90,6 +90,7 @@
                         <th>是否通过</th>
                         <th>审核时间</th>
                         <th>审核信息</th>
+                        <th>备注信息</th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -109,6 +110,7 @@
                                 {% endif %}
                                 <td>{{ report.5 }}</td>
                                 <td style="color: #ff2222">{{ report.6 }}</td>
+                                <td style="color: #FF9D00">{{ report.7 }}</td>
                                 <td><a  type="button" class='btn btn-warning btn-sm' id='update' href="{% url 'reportUpdate' %}?sqlid={{ report.0 }}"><i class='fa  fa-edit'></i> 修改</a></td>
                             </tr>
                     {% endfor %}

@@ -17,7 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from view.viewReviewHome import reviewUserLoginVerification,loginHome,reviewUserLogin,reviewUserLogout,index_char_pie,index_char_pie_ddl,index_char_line
 from view.viewReviewReport import reviewReport,reviewReportActive,reviewReportList,reportUpdate,reportUpdatePost,reviewReportHistory
-from view.viewReview import reviewReportListAll,reviewListAllHistory,reviewActive,reviewPost,reviewDetail,reviewPostHistory,reviewBak
+from view.viewReview import reviewReportListAll,reviewListAllHistory,reviewExecute,reviewPreExecute,reviewPost,reviewDetail,reviewPostHistory,reviewBak
 from view.test import test
 from view.viewTempReview import reviewTempActive,reviewTemp
 from view.viewRollBack import reviewRollBack
@@ -40,7 +40,8 @@ url(r'^review/v1.0/review/char1/', index_char_line,name='index_char_line'),
 url(r'^review/v1.0/review/char2/', index_char_pie,name='index_char_pie'),
 url(r'^review/v1.0/review/char3/', index_char_pie_ddl,name='index_char_pie_ddl'),
 url(r'^review/v1.0/review/detail/', reviewDetail,name='reviewDetail'),
-url(r'^review/v1.0/review/active/', reviewActive,name='reviewActive'),
+url(r'^review/v1.0/review/execute/', reviewExecute,name='reviewExecute'),
+url(r'^review/v1.0/review/preexecute/', reviewPreExecute,name='reviewPreExecute'),
 url(r'^review/v1.0/review/all/', reviewReportListAll,name='reviewReportListAll'),
 url(r'^review/v1.0/report/update/',reportUpdate,name='reportUpdate'),
 url(r'^review/v1.0/report/post/',reportUpdatePost,name='reportUpdatePost'),
