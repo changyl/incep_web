@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
-import logging,sys,MySQLdb,collections
+import logging,sys,MySQLdb
 from django.db import connections
+
 reload(sys)
 sys.setdefaultencoding('utf8')
 

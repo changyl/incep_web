@@ -155,9 +155,8 @@ def reviewReportHistory(request):
             cursor = connections['default'].cursor()
             cursor.execute(sql_sum)
             sum_row = cursor.fetchone()
-            sql = '''SELECT a.id,b.db_name,a.content,a.create_time,a.flag,a.review_time,a.remarks  FROM  tb_review a left join tb_databases_config as b
-                    on a.database_id=b.auto_id
-                WHERE
+            sql = '''SELECT a.id,b.db_name,a.content,a.create_time,a.flag,a.review_time,a.remarks  FROM  tb_review a 
+                    left join tb_databases_config as b on a.database_id=b.auto_id WHERE
                     a.creator={0}  and a.create_time<date_format(now(),'%Y-%m-%d 00:00:00') '''.format(
                 userid)
             cursor = connections['default'].cursor()
