@@ -11,8 +11,9 @@ from django.contrib.auth.views import login,logout,login_required,auth_login
 from models.models_inception import  information_schema,tb_databases_config,tb_review,tb_review_history
 import datetime as dtime
 import time,collections,json,datetime
-import MySQLdb,sys
+import sys
 from baseEmail import sendEmail
+from baseTools import auditActive,inceptionQuery
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -170,17 +171,10 @@ def reviewActive(request):
         cursor.execute(sql_database_info)
         row = cursor.fetchone()
         logging.debug(sql_database_info)
-        target_sql = '''/*--user={0};--password={1};--host={2};--execute=1;--enable-ignore-warnings;--port={3};*/'''.format(row[1],row[2],row[0],row[3])
-        db_sql = '''use {0};'''.format(row[4])
-        ddl_dml_sql = '''{0}''' .format(content)
+        audit_sql = auditActive(user=row[1],password=row[2],host=row[0],port=row[3],dbname=row[4],content=content)
 
-        main_sql = '''{0}inception_magic_start;{1}{2} inception_magic_commit;'''.format(target_sql,db_sql,ddl_dml_sql)
-        logging.debug(main_sql)
         if request.method == "POST" and request.user.is_superuser == 1:
-            conn = MySQLdb.connect(host='172.16.16.20', user='root', passwd='', db='', port=6669)
-            cur = conn.cursor()
-            cur.execute(main_sql.encode('utf-8'))
-            result = cur.fetchall()
+            result = inceptionQuery(audit_sql)
             flag = []
             for row in result:
                 flag.append(row[2])

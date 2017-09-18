@@ -17,7 +17,6 @@ logging.basicConfig(level=logging.DEBUG,
 
 
 
-
 class sendEmail:
     '''初始化email参数'''
     def __init__(self,title=None,message=None,from_email=None,to_email=None):
