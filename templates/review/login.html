@@ -30,7 +30,15 @@
                 <!--<h2 class="font-bold">Welcome to SQL review system！</h2>-->	
           		<!--<h1 class="logo-name"><img src="img/mysql.png"></h1>-->
         	</div>
+
             <div class="col-md-6">
+                <div class="alert alert-danger alert-dismissable {{ status }}">
+                    <button type="button" class="close" data-dismiss="alert"
+                            aria-hidden="true">
+                        &times;
+                    </button>
+                    错误！用户或密码错误！
+                </div>
                 <div class="ibox-content">
                     <form class="m-t" role="form" action="{% url 'loginVerification' %}" method="POST">
                         {% csrf_token %}
@@ -40,18 +48,9 @@
                         <div class="form-group">
                             <input type="password" name="passwd" id="idpasswd" class="form-control" placeholder="Password" required="">
                         </div>
-                        <button id="login" class="ladda-button ladda-button-demo btn btn-info block full-width m-b" data-style="zoom-in">Login</button>
-
-                        <!--<a href="login_two_columns.html#">
-                            <small>Forgot password?</small>
-                        </a>-->
+                        <button type="submit" class="ladda-button ladda-button-demo btn btn-success full-width m-b" data-style="zoom-in">登录</button>
 						<div>
-		                	
 		            	</div>
-                        <!--<p class="text-muted text-center">
-                            <small>Do not have an account?</small>
-                        </p>-->
-                       <!-- <a class="btn btn-sm btn-white btn-block" href="register.html">Create an account</a>-->
                     </form>
                     <p class="m-t">
                         <small> soyoung&copy; 2017</small>
@@ -79,40 +78,7 @@
     <script src="{% static 'js/plugins/ladda/ladda.min.js' %}"></script>
     <script src="{% static 'js/plugins/ladda/ladda.jquery.min.js' %}"></script>
     <script src="{% static 'js/plugins/sweetalert/sweetalert02.min.js' %}"></script>
-
 <script>
-
-function login(){
-        $.ajaxSetup({
-                data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
-        });
-        var user = $("#iduser").val();
-        var pwd = $("#idpasswd").val();
-
-        var pd = {"username":user, "password":pwd};
-
-        $.ajax({
-            type:"post",
-            url:"{% url 'loginVerification' %}",
-            data:pd,
-            async:true,
-            cache:false,
-            success:function(data){
-               if (data == 1){
-                   window.location.href="{% url 'home' %}";
-{#                    window.location.assign("/");#}
-{#                    window.event.returnValue=true;#}
-			    }
-                else {
-                    swal("用户或密码错误！");
-               }
-            },
-            error:function(){
-                swal("服务器异常！");
-            }
-        });
-{#    });#}
-};
     $(document).ready(function (){
 
         // Bind normal buttons
@@ -125,10 +91,7 @@ function login(){
             l.ladda( 'start' );
             // Timeout example
             // Do something in backend and then stop ladda
-            login();
         });
-
     });
-
 </script>
 </html>

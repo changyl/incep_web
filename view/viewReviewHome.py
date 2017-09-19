@@ -151,7 +151,9 @@ def index_char_line(request):
 #登录页面
 def reviewUserLogin(request):
     try:
-        return render(request, 'review/login.html', context=None)
+        dict = {}
+        dict['status'] = "hide"
+        return render(request, 'review/login.html', context=dict)
     except Exception,e:
         logging.error(e)
         return render(request, 'review/500.html', context=None)
@@ -162,19 +164,19 @@ def reviewUserLoginVerification(request):
     try:
         if request.method == "POST":
             #1、获取登录用户和密码
-            username = request.POST.get('username',None)
-            password = request.POST.get('password',None)
+            username = request.POST.get('user',None)
+            password = request.POST.get('passwd',None)
             print username,password
             uname = auth.authenticate(username=username, password=password)
 
             #判断用户和密码
             if uname is not None and uname.is_active:
                 auth.login(request, uname)
-                data = 1
-                return write(data)
+                return redirect('/')
             else:
-                data = 0
-                return write(data)
+                dict = {}
+                dict['status'] = ""
+                return render(request, 'review/login.html', context=dict)
     except Exception,e:
         logging.error(e)
         return render(request, 'review/500.html',context=None)
