@@ -240,7 +240,7 @@
                     targets: 9,//编辑
                     data: null,//下面这行，添加了编辑按钮和，删除按钮
                     render: function (data, type, full) {
-                              return "<button type='button' class='btn btn-warning btn-sm ' id='preexecute' data-title=" + full[0] + "  data-toggle='modal' ><i class='fa  fa-check'></i> 预审核</button>&nbsp;<button type='button' class='btn btn-danger btn-sm ' id='execute' data-title=" + full[0] + "  data-toggle='modal' ><i class='fa  fa-check'></i> 执行审核</button>&nbsp;<a type='button' href='/review/v1.0/review/detail/?sqlid="+data[0]+"' class='btn btn-info btn-sm' id='query'><i class='fa  fa-eye'></i> 审核结果</a>&nbsp;<button type='button'  class='btn btn-primary btn-sm' id='update' ><i class='fa  fa-edit'></i> 错误备注</button>"
+                              return "<button type='button' class='btn btn-warning btn-sm ' id='preexecute' data-title=" + full[0] + "  data-toggle='modal' ><i class='fa  fa-check'></i> 审核</button>&nbsp;<button type='button' class='btn btn-danger btn-sm ' id='execute' data-title=" + full[0] + "  data-toggle='modal' ><i class='fa  fa-space-shuttle'></i> 执行</button>&nbsp;<a type='button' href='/review/v1.0/review/detail/?sqlid="+data[0]+"' class='btn btn-info btn-sm' id='query'><i class='fa  fa-eye'></i> 审核结果</a>&nbsp;<button type='button'  class='btn btn-primary btn-sm' id='update' ><i class='fa  fa-edit'></i> 错误备注</button>"
                               }
                 }]
             });

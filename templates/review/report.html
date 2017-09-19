@@ -182,7 +182,6 @@
                   var text = editor_two.getValue();
                   var text2 = $("#bak").val();
                   var data = {"select": select, "text": text,"text2":text2};
-                  console.log(data)
                     swal({
                       title: "",
                       text: "",
@@ -200,7 +199,7 @@
                               type: "post",
                               url: "{% url 'reviewReportActive' %}",
                               data: data,
-                              timeout:"10000",
+                              timeout:"20000",
                               async: true,
                               cache: false,
                               success: function (res) {
