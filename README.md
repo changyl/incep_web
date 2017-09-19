@@ -1,6 +1,6 @@
 # incep_web
 
-incep_web 是基于django框架、以及去哪网开源的inception审核组成，主要给用户提供一个web界面,方便日常sql审核的一个平台。目前支持dml及create语法审核，后续也会进一步加入alter语法审核与线上执行。
+incep_web 是基于django框架、以及去哪网开源的inception审核组成，主要给用户提供一个web界面,方便日常sql审核的一个平台，平台包含预审核及审核功能。目前支持dml及create语法审核，后续也会进一步加入alter语法审核与线上执行。
 
 ## version
  	django 1.11.3
