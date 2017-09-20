@@ -50,7 +50,6 @@ def preAuditExecute(user,password,host,port,dbname,content):
     target_sql = '''/*--user={0};--password={1};--host={2};--enable-check;--port={3};*/'''.format(user,password,host,port)
     db_sql = '''use {0};'''.format(dbname)
     ddl_dml_sql = '''{0}''' .format(content)
-
     main_sql = '''{0}inception_magic_start;{1}{2} inception_magic_commit;'''.format(target_sql,db_sql,ddl_dml_sql)
     return main_sql
 
