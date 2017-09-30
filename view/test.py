@@ -10,7 +10,7 @@ from django.db.transaction import atomic
 from django.db import connections
 from django.contrib.auth.views import login,logout,login_required,auth_login
 from django.contrib import auth
-from models.models_inception import  information_schema,tb_databases_config,tb_review,tb_review_history
+from models.models_inception import  tb_databases_config,tb_review,tb_review_history
 from django.db.models import Q
 import time,collections,json,datetime
 import MySQLdb

@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from django.contrib import admin
 from models import backup_done_list,backup_task_list
-from models_inception import information_schema,tb_review,tb_databases_config,tb_review_history
+from models_inception import tb_review,tb_databases_config,tb_review_history
 import base64
 # Register your models here.
 

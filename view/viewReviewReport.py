@@ -8,7 +8,7 @@ import logging,sys
 from django.db.transaction import atomic
 from django.db import connections
 from django.contrib.auth.views import login_required
-from models.models_inception import  information_schema,tb_review,tb_review_history
+from models.models_inception import  tb_review,tb_review_history
 import datetime as dtime
 from baseTools import getUserInfoReport,getUserInfoReport_02
 from baseEmail import sendEmail
