@@ -5,8 +5,6 @@
     <link href="{% static 'js/plugins/datatables01/datatables.bootstrap.css' %}" rel="stylesheet">
        <!-- Sweet Alert -->
        <link href="{% static 'css/plugins/sweetalert/sweetalert02.css' %}" rel="stylesheet">
-       <!-- Ladda style -->
-    <link href="{% static 'css/plugins/ladda/ladda-themeless.min.css' %}" rel="stylesheet">
     {% endblock %}
 
 {% block bside %}
@@ -167,10 +165,6 @@
     <script src="{% static 'js/plugins/datatables01/datatables.bootstrap.min.js' %}"></script>
        <!-- Sweet alert -->
     <script src="{% static 'js/plugins/sweetalert/sweetalert-dev.js' %}"></script>
-    <!-- Ladda -->
-    <script src="{% static 'js/plugins/ladda/spin.min.js' %}"></script>
-    <script src="{% static 'js/plugins/ladda/ladda.min.js' %}"></script>
-    <script src="{% static 'js/plugins/ladda/ladda.jquery.min.js' %}"></script>
     <script>
     $.ajaxSetup({
             data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
@@ -246,7 +240,7 @@
                     targets: 9,//编辑
                     data: null,//下面这行，添加了编辑按钮和，删除按钮
                     render: function (data, type, full) {
-                              return "<button type='submit' class='ladda-button ladda-button-demo btn btn-warning btn-sm ' id='preexecute' data-title=" + full[0] + " data-style='zoom-in'  data-toggle='modal' ><i class='fa  fa-check'></i> 审核</button>&nbsp;<button type='button' class='ladda-button ladda-button-demo btn btn-danger btn-sm ' id='execute' data-title=" + full[0] + "  data-style='zoom-in' data-toggle='modal' ><i class='fa  fa-space-shuttle'></i> 执行</button>&nbsp;<a type='submit' href='/review/v1.0/review/detail/?sqlid="+data[0]+"' class='ladda-button ladda-button-demo btn btn-info' data-style='zoom-in' id='query'><i class='fa  fa-eye'></i> 审核结果</a>&nbsp;<button type='button'  class='ladda-button ladda-button-demo btn btn-primary btn-sm' data-style='zoom-in'  id='update' ><i class='fa  fa-edit'></i> 错误备注</button>"
+                              return "<button type='button' class='btn btn-warning btn-sm ' id='preexecute' data-title=" + full[0] + "  data-toggle='modal' ><i class='fa  fa-check'></i> 审核</button>&nbsp;<button type='button' class='btn btn-danger btn-sm ' id='execute' data-title=" + full[0] + "  data-toggle='modal' ><i class='fa  fa-space-shuttle'></i> 执行</button>&nbsp;<a type='button' href='/review/v1.0/review/detail/?sqlid="+data[0]+"' class='btn btn-info btn-sm' id='query'><i class='fa  fa-eye'></i> 审核结果</a>&nbsp;<button type='button'  class='btn btn-primary btn-sm' id='update' ><i class='fa  fa-edit'></i> 错误备注</button>"
                               }
                 }]
             });
@@ -354,26 +348,18 @@
     <script>
         //轮询数据
     </script>
-    <script>
-        $(document).ready(function (){
-
-            // Bind normal buttons
-            $( '.ladda-button' ).ladda( 'bind', 'button[type=submit]');
-            $( '.ladda-button' ).ladda( 'bind', { timeout: 5000 } );
-        });
-    </script>
-    <style>
-        .col_class{
-                    color:#cd0a0a;
-                }
-                .cos_class{
-                    color:#F5F683;
-                }
-        .col2_class{
-                    color:#FF9D00;
-                }
-                .cos_class{
-                    color:#F5F683;
-                }
-    </style>
+<style>
+    .col_class{
+                color:#cd0a0a;
+            }
+            .cos_class{
+                color:#F5F683;
+            }
+    .col2_class{
+                color:#FF9D00;
+            }
+            .cos_class{
+                color:#F5F683;
+            }
+</style>
 {% endblock %}
