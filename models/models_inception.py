@@ -6,21 +6,21 @@ from django.db import models
 定义inception相关模型
 '''
 
-class information_schema(models.Model):
-    CATALOG_NAME    =   models.CharField(u'CATLOG名称',max_length=512)
-    SCHEMA_NAME     =   models.CharField(u'CATLOG名称',max_length=64)
-    DEFAULT_CHARACTER_SET_NAME  =  models.CharField(u'名称',max_length=32)
-    DEFAULT_COLLATION_NAME  =  models.CharField(u'用户名称',max_length=32)
-    SQL_PATH  =  models.CharField(u'用户名称',max_length=512)
-
-    class Meta:
-        verbose_name = '用户账户清零'
-        verbose_name_plural = '用户账户清零'
-        # db_table = "menus"  #重写数据表名称，覆盖类名
-        # db_tablespace = "" 表空间名称
-
-    def __unicode__(self):
-        return self.SCHEMA_NAME
+# class information_schema(models.Model):
+#     CATALOG_NAME    =   models.CharField(u'CATLOG名称',max_length=512)
+#     SCHEMA_NAME     =   models.CharField(u'CATLOG名称',max_length=64)
+#     DEFAULT_CHARACTER_SET_NAME  =  models.CharField(u'名称',max_length=32)
+#     DEFAULT_COLLATION_NAME  =  models.CharField(u'用户名称',max_length=32)
+#     SQL_PATH  =  models.CharField(u'用户名称',max_length=512)
+#
+#     class Meta:
+#         verbose_name = '用户账户清零'
+#         verbose_name_plural = '用户账户清零'
+#         # db_table = "menus"  #重写数据表名称，覆盖类名
+#         # db_tablespace = "" 表空间名称
+#
+#     def __unicode__(self):
+#         return self.SCHEMA_NAME
 
 
 
