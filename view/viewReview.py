@@ -159,7 +159,7 @@ def reviewPreExecute(request):
                 flag.append(row[2])
                 rep_str = row[5]
                 strs = rep_str.replace("'","\\'")
-                strss = strs.replace('"', '\\"')
+                strss = strs.replace('"', "\\'")
                 sql = '''REPLACE into tb_review_detail(tid,stage,errlevel,stagestatus,errormessage,`sql`,Affected_rows,sequence,backup_dbname,execute_time,sqlsha1,sql_id) values({0},"{1}",{2},"{3}","{4}",'{5}',{6},"{7}","{8}","{9}","{10}",{11}) ;''' .format(row[0],row[1],row[2],row[3],row[4],strss,row[6],row[7],row[8],row[9],row[10],sql_id)
                 print sql
                 cursor = connections['default'].cursor()
@@ -195,7 +195,10 @@ def reviewExecute(request):
             flag = []
             for row in result:
                 flag.append(row[2])
-                sql = '''REPLACE into tb_review_detail(tid,stage,errlevel,stagestatus,errormessage,`sql`,Affected_rows,sequence,backup_dbname,execute_time,sqlsha1,sql_id) values({0},"{1}",{2},"{3}","{4}","{5}",{6},"{7}","{8}","{9}","{10}",{11}) ;''' .format(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9],row[10],sql_id)
+                rep_str = row[5]
+                strs = rep_str.replace("'", "\\'")
+                strss = strs.replace('"', "\\'")
+                sql = '''REPLACE into tb_review_detail(tid,stage,errlevel,stagestatus,errormessage,`sql`,Affected_rows,sequence,backup_dbname,execute_time,sqlsha1,sql_id) values({0},"{1}",{2},"{3}","{4}","{5}",{6},"{7}","{8}","{9}","{10}",{11}) ;''' .format(row[0],row[1],row[2],row[3],row[4],strss,row[6],row[7],row[8],row[9],row[10],sql_id)
                 cursor = connections['default'].cursor()
                 cursor.execute(sql)
             cursor.close()

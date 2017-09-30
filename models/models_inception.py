@@ -41,8 +41,8 @@ class tb_review(models.Model):
         db_table = "tb_review"  #重写数据表名称，覆盖类名
         # db_tablespace = "" 表空间名称
 
-    def __unicode__(self):
-        return self.database_id
+    # def __unicode__(self):
+    #     return self.database_id
 
 class tb_review_history(models.Model):
     id    =   models.AutoField(primary_key=True,max_length=11)

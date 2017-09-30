@@ -80,8 +80,9 @@
     $(document).ready(function (){
 
         // Bind normal buttons
-        $( '.ladda-button' ).ladda( 'bind', { timeout: 5000 } );
         $( '.ladda-button' ).ladda( 'bind', 'button[type=submit]');
+        $( '.ladda-button' ).ladda( 'bind', { timeout: 5000 } );
+
     });
 </script>
 </html>
