@@ -1,0 +1,315 @@
+{% extends "review/base.html" %}
+{% load static %}
+
+   {% block extrastyle %}
+    <link href="{% static 'js/plugins/datatables01/datatables.bootstrap.css' %}" rel="stylesheet">
+       <!-- Sweet Alert -->
+       <link href="{% static 'css/plugins/sweetalert/sweetalert02.css' %}" rel="stylesheet">
+    {% endblock %}
+
+{% block bside %}
+    <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element"> <span>
+{#                            <img alt="image" class="img-circle" src="/models/static/img/profile_small.jpg" />#}
+                             </span>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{ user }}</strong>
+                             </span> <span class="text-muted text-xs block"><b class="caret"></b></span> </span> </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+{#                                <li><a href="{% url 'userPofile' %}">Profile</a></li>#}
+{#                                <li class="divider"></li>#}
+                                <li><a href="{% url 'userLogout' %}">Logout</a></li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                            IN+
+                        </div>
+                    </li>
+                    <li >
+                        <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">主页</span> <span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li><a href="/">仪表盘</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="active">
+                        <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">SQL审核</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="{% url 'sqlReport' %}">上报</a></li>
+                            <li class="active"><a href="{% url 'sqlAuditList' %}">审核列表</a></li>
+                            <li><a href="{% url 'auditHistoryList' %}">历史记录列表</a></li>
+{#
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-book"></i> <span class="nav-label">使用示例</span></a>
+                    </li>
+                </ul>
+{% endblock %}
+
+{% block bodyct %}
+         <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>SQL审核</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="index.html">主页</a>
+                        </li>
+                        <li>
+                            <a>SQL审核</a>
+                        </li>
+                        <li class="active">
+                            <strong>审核列表</strong>
+                        </li>
+                    </ol>
+                </div>
+                <div class="col-lg-2">
+
+                </div>
+            </div>
+   <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <div class="table-responsive">
+                        <table id="table_server" class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th >#</th>
+                                    <th >目标数据库</th>
+                                    <th >数据库ID</th>
+                                    <th >SQL</th>
+                                    <th >审核状态</th>
+                                    <th >上报时间</th>
+                                    <th >上报人</th>
+                                    <th style="color: #676a6c">信息</th>
+                                    <th style="color: #676a6c">备注信息</th>
+                                    <th >操作</th>
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <form class="form-inline" role="form">
+                      <div class="form-group">
+                        <label  for="dd1">SQLID</label>
+                        <input type="text" class="form-control" id="dd1" disabled>
+                      </div>
+                      <div class="form-group">
+                        <label  for="dd2">SCHEMA</label>
+                        <input type="text" class="form-control" id="dd2" disabled>
+                      </div>
+                    </form>
+            </div>
+            <div class="modal-body">
+                    <form class="form-inline" role="form">
+                        <div class="form-group">
+                        <label  for="dd3">备注</label>
+                            <textarea  class="form-control" style="width: 500px" rows="5" id="dd3" ></textarea>
+                        </div>
+                    </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white"  data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-info" id="save"  >保存</button>
+            </div>
+        </div>
+        </div>
+</div>
+
+{% endblock %}
+
+  {% block footer %}
+        <div class="footer">
+            <div class="pull-right">
+                10GB of <strong>250GB</strong> Free.
+            </div>
+            <div>
+                <strong>Copyright</strong> Example Company &copy; 2014-2015
+            </div>
+        </div>
+{% endblock %}
+    {% block jscripts %}
+    <!-- Mainly scripts -->
+
+    <script src="{% static 'js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
+    <script src="{% static 'js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+
+
+    <!-- Custom and plugin javascript -->
+    <script src="{% static 'js/inspinia.js' %}"></script>
+    <script src="{% static 'js/plugins/pace/pace.min.js' %}"></script>
+
+    <!-- jQuery UI -->
+    <script src="{% static 'js/plugins/datatables01/jquery.datatables.min.js' %}"></script>
+    <script src="{% static 'js/plugins/datatables01/datatables.bootstrap.min.js' %}"></script>
+       <!-- Sweet alert -->
+    <script src="{% static 'js/plugins/sweetalert/sweetalert-dev.js' %}"></script>
+    <script>
+    $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+     });
+
+    $(function(){
+        var tables=$('#table_server').DataTable({
+            //$("#table_server").dataTable({
+
+                //lengthMenu: [5, 10, 20, 30],//这里也可以设置分页，但是不能设置具体内容，只能是一维或二维数组的方式，所以推荐下面language里面的写法。
+                paging: true,//分页
+                ordering: false,//是否启用排序
+                searching: false,//搜索
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                ajax: {//类似jquery的ajax参数，基本都可以用。
+                        type: "get",//后台指定了方式，默认get，外加datatable默认构造的参数很长，有可能超过get的最大长度。
+                        url: "{% url 'sqlAuditPost' %}",
+                        dataSrc: "data",//默认data，也可以写其他的，格式化table的时候取里面的数据
+                        data: function (d) {
+                            return d;//自定义需要传递的参数。
+                        },
+                    },
+                columns: [//对应上面thead里面的序列
+                        { data: 0 },
+                        { data: 1 },//字段名字和返回的json序列的key对应
+                        { data: 2 },
+                        { data: 3 },
+                        { data: 4 },
+                        { data: 5 },
+                        { data: 6 },
+                        { data: 7 },
+                        { data: 8 },
+                        { data: null }
+                    ],
+                language: {
+                    lengthMenu: '<select class="form-control input-xsmall">' + '<option value="1">1</option>' + '<option value="10">10</option>' + '<option value="20">20</option>' + '<option value="30">30</option>' + '<option value="40">40</option>' + '<option value="50">50</option>' + '</select>条记录',//左上角的分页大小显示。
+
+                    //search: '<span class="label label-success">搜索：</span>',//右上角的搜索文本，可以写html标签
+                    paginate: {//分页的样式内容。
+                        previous: "上一页",
+                        next: "下一页",
+                        first: "第一页",
+                        last: "最后"
+                    },
+                    zeroRecords: "没有数据",//table tbody内容为空时，tbody的内容。
+                    //下面三者构成了总体的左下角的内容。
+                    info: "总共_PAGES_ 页，显示第_START_ 到第 _END_ ，筛选之后得到 _TOTAL_ 条，初始_MAX_ 条 ",//左下角的信息显示，大写的词为关键字。
+                    infoEmpty: "0条记录",//筛选为空时左下角的显示。
+                    infoFiltered: ""//筛选之后的左下角筛选提示，
+                },
+                pagingType: "full_numbers",//分页样式的类型
+                columnDefs: [
+                    {
+                    targets: 4,//编辑
+                    data: null,//下面这行，添加了编辑按钮和，删除按钮
+                    //defaultContent:"<button type='button' class='btn btn-primary btn-sm' data-toggle='modal' data-target='#myModal'><i class='fa  fa-edit'></i>修改</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type='button' class='btn btn-danger btn-sm' data-toggle='modal' data-target='#myModal'><i class='fa  fa-trash'></i>删除</button>"
+                    //defaultContent: "<button id='editrow' class='btn btn-primary' type='button' style='margin-right:10px;'>编辑</button><button id='delrow' class='btn btn-primary' type='button'>删除</button>"
+                    render: function (data, type, full) {
+                        if (full[4] == 0)
+                            return "<p><span class='label label-success'>未审核</span></p>";
+                        if (full[4]== 1)
+                            return "<p><span class='label label-danger'>不通过</span></p>";
+                        else
+                            return "<p><span class='label label-primary'>已通过</span></p>";
+
+                    }
+                    },
+                    {sClass:"col_class","aTargets":[7]},
+                    {sClass:"col2_class","aTargets":[8]},
+                    {
+                    targets: 9,//编辑
+                    data: null,//下面这行，添加了编辑按钮和，删除按钮
+                    render: function (data, type, full) {
+                              return "<button type='button' class='btn btn-warning btn-sm ' id='preexecute' data-title=" + full[0] + "  data-toggle='modal' ><i class='fa  fa-check'></i> 审核</button>&nbsp;<button type='button' class='btn btn-danger btn-sm ' id='execute' data-title=" + full[0] + "  data-toggle='modal' ><i class='fa  fa-space-shuttle'></i> 执行</button>&nbsp;<a type='button' href='/review/v1.0/audit/detail/?sqlid="+data[0]+"' class='btn btn-info btn-sm' id='query'><i class='fa  fa-eye'></i> 审核结果</a>&nbsp;<a type='button'  class='btn btn-primary btn-sm' id='update' href='/review/v1.0/report/update/?sqlid="+data[0]+"' ><i class='fa  fa-edit'></i> 修改</a>"
+                              }
+                }]
+            });
+
+            //执行预审核
+                $('#table_server tbody').on( 'click', 'button#preexecute', function () {
+                    var data = tables.row( $(this).parents('tr') ).data();
+                        $.ajax({
+                            data:{"sqlid":data[0],"id":data[2],"content":data[3],"creator":data[5]},
+                            url:"{% url 'auditPreExecute' %}",
+                            type:'post',
+                            timeout:"30000",
+                            cache:"false",
+                            async:"true",
+                            success:function(str){
+                                swal("预审核完成，可点击审核结果查看详细信息！");
+                                    tables.row().remove().draw( false );//删除这行的数据
+                            },
+                            error:function(err){
+                                swal("服务器繁忙！");
+                            }
+                        });
+                });
+
+            //执行审核
+                $('#table_server tbody').on( 'click', 'button#execute', function () {
+                    var data = tables.row( $(this).parents('tr') ).data();
+                    if (data[4] == 1 || data[4] == 2)
+
+                        {swal("已执行审核！");
+                        }
+                    else
+                        {
+                        $.ajax({
+                            data:{"sqlid":data[0],"id":data[2],"content":data[3],"creator":data[5]},
+                            url:"{% url 'auditExecute' %}",
+                            type:'post',
+                            timeout:"30000",
+                            cache:"false",
+                            async:"true",
+                            success:function(str){
+                                swal("审核完成！");
+                                    tables.row().remove().draw( false );//删除这行的数据
+                            },
+                            error:function(err){
+                                swal("服务器失败！");
+                            }
+                        });
+                        }
+
+                });
+    });
+
+    </script>
+    <script>
+        //轮询数据
+    </script>
+<style>
+    .col_class{
+                color:#cd0a0a;
+            }
+            .cos_class{
+                color:#F5F683;
+            }
+    .col2_class{
+                color:#FF9D00;
+            }
+            .cos_class{
+                color:#F5F683;
+            }
+</style>
+{% endblock %}
