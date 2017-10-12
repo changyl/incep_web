@@ -11,7 +11,7 @@ from models.models_inception import  tb_databases_config,tb_review,tb_review_his
 import datetime as dtime
 import collections,json,datetime,sys,logging
 from baseEmail import sendEmail
-from baseTools import auditExecute,preAuditExecute,inceptionQuery,getUserInfo,getUserInfo_02
+from baseTools import Execute,preAuditExecute,inceptionQuery,getUserInfo,getUserInfo_02
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -21,13 +21,6 @@ logging.basicConfig(level=logging.DEBUG,
                     datefmt='%a, %d %b %Y %H:%M:%S',
                     filename='data_manage.log',
                     filemode='a')
-
-today=dtime.date.today()
-oneday=dtime.timedelta(days=1)
-yesterday=today-oneday
-
-date = "%s 00:00:00" % (today)
-from_email='sqlaudit@soyoung.com'
 
 class DateEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -40,7 +33,7 @@ class DateEncoder(json.JSONEncoder):
 def reviewReportListAll(request):
     '''所有审核内容上报列表'''
     try:
-        if request.method == "GET" and request.user.is_superuser == 1:
+        if request.method == "GET" and request.user.is_staff == 1:
             result = getUserInfo(username=request.user.username)
             return render(request, 'review/review_list_all.html', context=result)
         else:
@@ -54,7 +47,7 @@ def reviewReportListAll(request):
 def reviewPost(request):
     '''所有审核内容上报列表'''
     try:
-        if request.method == "GET" and request.user.is_superuser == 1:
+        if request.method == "GET" and request.user.is_staff == 1:
             start = 0
             length = 0
             sumcnt = 0
@@ -92,7 +85,7 @@ def reviewPost(request):
 def reviewListAllHistory(request):
     '''所有审核内容上报历史'''
     try:
-        if request.method == "GET" and request.user.is_superuser == 1:
+        if request.method == "GET" and request.user.is_staff == 1:
             result = getUserInfo(username=request.user.username)
             return render(request, 'review/review_history.html', context=result)
         else:
@@ -107,7 +100,7 @@ def reviewListAllHistory(request):
 def reviewPostHistory(request):
     '''所有审核内容上报列表'''
     try:
-        if request.method == "GET" and request.user.is_superuser == 1:
+        if request.method == "GET" and request.user.is_staff == 1:
             start = 0
             length = 0
             sumcnt = 0
@@ -152,7 +145,7 @@ def reviewPreExecute(request):
         logging.debug(sql_database_info)
         audit_sql = preAuditExecute(user=row[1],password=row[2],host=row[0],port=row[3],dbname=row[4],content=content)
 
-        if request.method == "POST" and request.user.is_superuser == 1:
+        if request.method == "POST" and request.user.is_staff == 1:
             result = inceptionQuery(audit_sql)
             flag = []
             for row in result:
@@ -188,9 +181,9 @@ def reviewExecute(request):
         cursor.execute(sql_database_info)
         row = cursor.fetchone()
         logging.debug(sql_database_info)
-        audit_sql = auditExecute(user=row[1],password=row[2],host=row[0],port=row[3],dbname=row[4],content=content)
+        audit_sql = Execute(user=row[1],password=row[2],host=row[0],port=row[3],dbname=row[4],content=content)
 
-        if request.method == "POST" and request.user.is_superuser == 1:
+        if request.method == "POST" and request.user.is_staff == 1:
             result = inceptionQuery(audit_sql)
             flag = []
             for row in result:
@@ -234,7 +227,7 @@ def reviewExecute(request):
 def reviewDetail(request):
     '''审核内容详情'''
     try:
-        if request.method == "GET" and request.user.is_superuser == 1:
+        if request.method == "GET" and request.user.is_staff == 1:
             sql_id = request.GET.get('sqlid',None)
             dict_report = getUserInfo_02(username=request.user.username,sql_id=sql_id)
             return render(request, 'review/review_detail.html', context=dict_report)
@@ -248,7 +241,7 @@ def reviewDetail(request):
 @login_required()
 def reviewBak(request):
     try:
-        if request.method == 'POST' and request.user.is_superuser == 1:
+        if request.method == 'POST' and request.user.is_staff == 1:
             sql_id = request.POST.get('id',None)
             bak = request.POST.get('bak',None)
             res = tb_review.objects.get(id=sql_id)

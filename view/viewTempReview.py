@@ -31,7 +31,7 @@ date = "%s 00:00:00" % (today)
 def reviewTemp(request):
     '''临时审核页列表'''
     try:
-        if request.method == "GET" and request.user.is_superuser == 1:
+        if request.method == "GET" and request.user.is_staff == 1:
             sql_sum = '''select count(*) from tb_review where flag=0 and create_time >date_format(now(),'%Y-%m-%d 00:00:00')''' .format(date)
             cursor = connections['default'].cursor()
             cursor.execute(sql_sum)
@@ -56,7 +56,7 @@ def reviewTemp(request):
 @atomic()
 def reviewTempActive(request):
     try:
-        if request.method == "POST" and request.user.is_superuser == 1:
+        if request.method == "POST" and request.user.is_staff == 1:
             # 1、获取审核内容
             select = request.POST.getlist('select',None)
             content = request.POST.get('text',None)

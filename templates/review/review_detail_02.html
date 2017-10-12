@@ -1,8 +1,10 @@
 {% extends "review/base.html" %}
 {% load static %}
-
+{% block title %}title name{% endblock %}
    {% block extrastyle %}
     <link href="{% static 'css/plugins/datatables/datatables.min.css' %}" rel="stylesheet">
+       <!-- Sweet Alert -->
+       <link href="{% static 'css/plugins/sweetalert/sweetalert02.css' %}" rel="stylesheet">
     {% endblock %}
 
 {% block bside %}
@@ -15,9 +17,9 @@
                             <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{ user }}</strong>
                              </span> <span class="text-muted text-xs block"><b class="caret"></b></span> </span> </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a href="{% url 'userPofile' %}">Profile</a></li>
-                                <li class="divider"></li>
-                                <li><a href="{% url 'userLogout' %}">Logout</a></li>
+{#                                <li><a href="{% url 'userPofile' %}">Profile</a></li>#}
+{#                                <li class="divider"></li>#}
+                                <li><a href="{% url 'userLogout' %}">Logout123</a></li>
                             </ul>
                         </div>
                         <div class="logo-element">
@@ -32,32 +34,32 @@
                     </li>
 
                     <li class="active">
-                        <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">SQL变更</span><span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">SQL审核</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
-                            <li><a href="{% url 'reviewReport' %}">上报</a></li>
-                            <li class="active"><a href="{% url 'reviewReportList' %}">审核列表</a></li>
-                            <li><a href="{% url 'reviewReportHistory' %}">上报历史记录列表</a></li>
+                            <li ><a href="{% url 'sqlReport' %}">上报</a></li>
+                            <li ><a href="{% url 'sqlAuditList' %}">审核列表</a></li>
+                            <li><a href="{% url 'auditHistoryList' %}">上报历史记录列表</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a href="{% url 'reviewUseExamp' %}"><i class="fa fa-book"></i> <span class="nav-label">使用示例</span></a>
+                        <a href="#"><i class="fa fa-book"></i> <span class="nav-label">使用示例</span></a>
                     </li>
                 </ul>
 {% endblock %}
 
 {% block bodyct %}
-         <div class="row wrapper border-bottom white-bg page-heading">
+          <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
-                    <h2>SQL变更</h2>
+                    <h2> SQL审核</h2>
                     <ol class="breadcrumb">
                         <li>
                             <a href="/">主页</a>
                         </li>
                         <li>
-                            <a>SQL变更</a>
+                            <a>sql审核</a>
                         </li>
                         <li class="active">
-                            <strong>审核列表</strong>
+                            <strong>审核详细信息列表</strong>
                         </li>
                     </ol>
                 </div>
@@ -70,7 +72,7 @@
                 <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5></h5>
+                        <h5>审核详细信息</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -84,38 +86,50 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>数据库</th>
-                        <th>SQL</th>
-                        <th>上报时间</th>
-                        <th>是否通过</th>
-                        <th>审核时间</th>
+                        <th>stage</th>
+                        <th>错误级别</th>
                         <th>审核信息</th>
-                        <th>备注信息</th>
+                        <th>错误信息</th>
+                        <th>sql</th>
+                        <th>影响数</th>
+                        <th>序列号</th>
+                        <th>备份名称</th>
+                        <th>执行时间</th>
+                        <th>sql_id</th>
                         <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
                     {%  for report in reportlist %}
                             <tr class="gradeX">
-                                <td>{{ report.0 }}</td>
+
                                 <td>{{ report.1 }}</td>
                                 <td>{{ report.2 }}</td>
-                                <td>{{ report.3 }}</td>
-                                {% if report.4 == 0 %}
-                                    <td><p><span class="label label-success">未审核</span></p></td>
-                                {% elif report.4 == 1 %}
-                                    <td><p><span class="label label-danger">不通过</span></p></td>
+                                {% if report.3 == 0 %}
+                                    <td><p><span class="label label-primary">通过</span></p></td>
+                                {% elif report.3 == 1 %}
+                                    <td><p><span class="label label-warning">警告</span></p></td>
                                 {% else %}
-                                    <td><p><span class="label label-primary">已通过</span></p></td>
+                                    <td><p><span class="label label-danger">危险</span></p></td>
                                 {% endif %}
+                                <td>{{ report.4 }}</td>
                                 <td>{{ report.5 }}</td>
-                                <td style="color: #ff2222">{{ report.6 }}</td>
-                                <td style="color: #FF9D00">{{ report.7 }}</td>
-                                <td><a  type="button" class='btn btn-warning btn-sm' id='update' href="{% url 'reportUpdate' %}?sqlid={{ report.0 }}"><i class='fa  fa-edit'></i> 修改</a></td>
+                                <td>{{ report.6 }}</td>
+                                <td>{{ report.7 }}</td>
+                                <td>{{ report.8 }}</td>
+                                <td>{{ report.9 }}</td>
+                                <td>{{ report.10 }}</td>
+{#                                <td>{{ report.11 }}</td>#}
+                                <td>{{ report.12 }}</td>
+                                {% if 'Execute Successfully' in report.4 and 'EXECUTED' in report.2  %}
+                                      <td><button type='button' class='btn btn-danger btn-sm ' data-title=full[0]  id='execute' ><i class='fa  fa-check' ></i> 执行回滚</button></td>
+                                {% else %}
+                                      <td><button type='button' class='btn btn-danger btn-sm '  disabled="disabled"><i class='fa  fa-check' ></i> 执行回滚</button></td>
+                                {% endif %}
+
                             </tr>
                     {% endfor %}
                     </tbody>
-
                     </table>
                         </div>
 
@@ -125,19 +139,8 @@
             </div>
         </div>
 {% endblock %}
-
-  {% block footer %}
-        <div class="footer">
-            <div class="pull-right">
-                10GB of <strong>250GB</strong> Free.
-            </div>
-            <div>
-                <strong>Copyright</strong> Example Company &copy; 2014-2015
-            </div>
-        </div>
-{% endblock %}
     {% block jscripts %}
-    <!-- Mainly scripts -->
+   <!-- Mainly scripts -->
 
     <script src="{% static 'js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
     <script src="{% static 'js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
@@ -149,14 +152,16 @@
 
     <!-- jQuery UI -->
     <script src="{% static 'js/plugins/datatables/datatables.min.js' %}"></script>
+     <!-- Sweet alert -->
+    <script src="{% static 'js/plugins/sweetalert/sweetalert-dev.js' %}"></script>
     <script>
-        $.ajaxSetup({
-                data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
-         });
-        $(document).ready(function(){
-            $('.dataTables-example').DataTable({
+            $.ajaxSetup({
+                    data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+             });
+
+        var dt = $('.dataTables-example').DataTable({
                 dom: '<"html5buttons"B>lTfgitp',
-                order: [[ 0, "desc" ]],
+                ordering: false,
                 buttons: [
                     {extend: 'copy'},
                     {extend: 'csv'},
@@ -173,47 +178,28 @@
                     }
                     }
                 ]
-
             });
 
-        });
+
+        $('.dataTables-example').on( 'click', 'button#execute', function () {
+                    var data =  dt.row( $(this).parents('tr') ).data();
+                    console.log(data)
+                        $.ajax({
+                            data:{"xlh":data[7],"db_bak":data[8],"sql_id":data[10]},
+                            url:"{% url 'reviewRollBack' %}",
+                            type:'post',
+                            timeout:"3000",
+                            cache:"false",
+                            success:function(str){
+                                swal("回滚完成！");
+                                    //dt.row().remove().draw( false );//删除这行的数据
+                            },
+                            error:function(err){
+                                swal("服务器失败！");
+                            }
+                        });
+                });
 
     </script>
-
-
-
-        <script>
-             $.ajaxSetup({
-                    data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
-             });
-
-              $("#report").click(function () {
-
-                  var select = $("#select").val();
-                  var text = $("#text").val();
-
-                  var data = {"select": select, "text": text};
-                    console.log(data);
-
-                  $.ajax({
-                      type: "post",
-                      url: "{% url 'reviewReportActive' %}",
-                      data: data,
-                      async: true,
-                      cache: false,
-                      success: function (res) {
-                          if (res == 1) {
-                              alert("上报成功！")
-                          }
-                          else {
-                              alert("用户或密码错误！")
-                          }
-                      },
-                      error: function () {
-                          alert("服务器异常！");
-                      }
-                  });
-              });
-        </script>
 
 {% endblock %}

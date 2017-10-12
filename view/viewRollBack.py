@@ -24,7 +24,7 @@ logging.basicConfig(level=logging.DEBUG,
 @login_required()
 def reviewRollBack(request):
     try:
-        if request.method == 'POST' and request.user.is_superuser == 1:
+        if request.method == 'POST' and request.user.is_staff == 1:
             x_id = request.POST.get('xlh',None)
             db_bak = request.POST.get('db_bak',None)
             sql_id = request.POST.get('sql_id',None)

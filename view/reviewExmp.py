@@ -22,8 +22,8 @@ logging.basicConfig(level=logging.DEBUG,
 def reviewUseExamp(request):
     '''所有审核内容上报列表'''
     try:
-        print request.user.is_superuser
-        if request.method == "GET" and request.user.is_superuser == 0:
+        print request.user.is_staff
+        if request.method == "GET" and request.user.is_staff == 0:
             name = request.user.username
             sql_sum = '''select count(*) from tb_review where flag=1'''
             cursor = connections['default'].cursor()

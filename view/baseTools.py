@@ -14,7 +14,10 @@ logging.basicConfig(level=logging.DEBUG,
                     filemode='a')
 
 
-def auditExecute(user,password,host,port,dbname,content):
+
+
+
+def Execute(user,password,host,port,dbname,content):
     """
     :param user:
     :param password:
@@ -33,6 +36,25 @@ def auditExecute(user,password,host,port,dbname,content):
     main_sql = '''{0}inception_magic_start;{1}{2} inception_magic_commit;'''.format(target_sql,db_sql,ddl_dml_sql)
     return main_sql
 
+
+def fullExecute(user,password,host,port,dbname,content):
+    """
+    :param user:
+    :param password:
+    :param host:
+    :param port:
+    :param dbname:
+    :param content:
+    :return: sql
+    :desc:拼接具体审核的sql格式
+    :author:changyl
+    """
+    target_sql = '''/*--user={0};--password={1};--host={2};--execute=1;--port={3};*/'''.format(user,password,host,port)
+    db_sql = '''use {0};'''.format(dbname)
+    ddl_dml_sql = '''{0}''' .format(content)
+
+    main_sql = '''{0}inception_magic_start;{1}{2} inception_magic_commit;'''.format(target_sql,db_sql,ddl_dml_sql)
+    return main_sql
 
 
 def preAuditExecute(user,password,host,port,dbname,content):
@@ -68,6 +90,11 @@ def inceptionQuery(main_sql):
 
 
 def getUserInfo(username):
+    '''
+    :param username: cyl
+    :return: 用户任务数、名称
+    :desc:获取用户信息
+    '''
     sql_sum = '''select count(*) from tb_review where flag=0 and create_time >date_format(now(),'%Y-%m-%d 00:00:00')'''
     cursor = connections['default'].cursor()
     cursor.execute(sql_sum)
@@ -144,3 +171,10 @@ def getUserInfoReport_02(userid,username):
     dict_report['user'] = username
     dict_report['taskCount'] = sum_row
     return dict_report
+
+
+
+#获取用户类别
+def getUserType(request):
+    user_type = request.user.is_staff
+    return user_type

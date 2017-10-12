@@ -9,6 +9,7 @@ from django.db import connections
 from django.contrib.auth.views import login,logout,login_required,auth_login
 from django.contrib import auth
 import datetime as dtime
+from baseTools import getUserType
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -30,9 +31,8 @@ class DecimalEncoder(json.JSONEncoder):
 @login_required
 def loginHome(request):
     try:
-        user_type = request.user.is_superuser
+        user_type = getUserType(request)
         # sql = '''select * from coolqi_menus'''
-
         # menu_1 = menus.objects.filter(parent_id = 0).order_by('sort').all()
         # menu_2 = menus.objects.filter(~Q(parent_id = 0)).all()
         username = request.user.username
@@ -62,7 +62,7 @@ def loginHome(request):
             return render(request,'review/index_custom.html',context=dict_1)
         else:
             dict_1 = {}
-            sql_sum = '''select count(*) from tb_review where flag=1 and create_time >date_format(now(),'%Y-%m-%d 00:00:00')'''
+            sql_sum = '''select count(*) from tb_review where flag=0 and create_time >date_format(now(),'%Y-%m-%d 00:00:00')'''
             cursor = connections['default'].cursor()
             cursor.execute(sql_sum)
             sum_row = cursor.fetchone()
@@ -75,7 +75,8 @@ def loginHome(request):
 @login_required
 def index_char_pie(request):
     try:
-        if request.user.is_superuser == 1 and request.method == "POST":
+        user_type = getUserType(request)
+        if user_type == 1 and request.method == "POST":
             sql_stat = '''select sum(deleting) del,sum(inserting) as ins,sum(updating) as upd from statistic'''
             cursor = connections['data_backup'].cursor()
             cursor.execute(sql_stat)
@@ -92,7 +93,7 @@ def index_char_pie(request):
 @login_required
 def index_char_pie_ddl(request):
     try:
-        if request.user.is_superuser == 1 and request.method == "POST":
+        if request.user.is_staff == 1 and request.method == "POST":
             sql_stat = '''select
                                 SUM(altertable) AS altab,
                                 SUM(renaming) AS renm,
@@ -120,7 +121,7 @@ def index_char_pie_ddl(request):
 @login_required
 def index_char_line(request):
     try:
-        if request.user.is_superuser == 1 and request.method == "POST":
+        if request.user.is_staff == 1 and request.method == "POST":
             sql_stat = '''SELECT 
                         *
                     FROM

@@ -15,8 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from viewReport import sqlReport,sqlReportActive
+from viewAuditList import sqlAuditList,sqlAuditPost,auditDetail,auditExecute,auditPreExecute
+from viewAuditHistoryList import auditHistoryList,auditHistoryListDate
+from viewAuditModify import sqlUpdate,sqlUpdateActive
 from view.viewReviewHome import reviewUserLoginVerification,loginHome,reviewUserLogin,reviewUserLogout,index_char_pie,index_char_pie_ddl,index_char_line
-from view.viewReviewReport import reviewReport,reviewReportActive,reviewReportList,reportUpdate,reportUpdatePost,reviewReportHistory
+from view.viewReviewReport import reportUpdate,reportUpdatePost
 from view.viewReview import reviewReportListAll,reviewListAllHistory,reviewExecute,reviewPreExecute,reviewPost,reviewDetail,reviewPostHistory,reviewBak
 from view.test import test
 from view.viewTempReview import reviewTempActive,reviewTemp
@@ -43,16 +47,26 @@ url(r'^review/v1.0/review/detail/', reviewDetail,name='reviewDetail'),
 url(r'^review/v1.0/review/execute/', reviewExecute,name='reviewExecute'),
 url(r'^review/v1.0/review/preexecute/', reviewPreExecute,name='reviewPreExecute'),
 url(r'^review/v1.0/review/all/', reviewReportListAll,name='reviewReportListAll'),
-url(r'^review/v1.0/report/update/',reportUpdate,name='reportUpdate'),
-url(r'^review/v1.0/report/post/',reportUpdatePost,name='reportUpdatePost'),
+
 url(r'^review/v1.0/review/bak/', reviewBak,name='reviewBak'),
 url(r'^review/v1.0/review/post/', reviewPost,name='reviewPost'),
 url(r'^review/v1.0/review/history/post/', reviewPostHistory,name='reviewPostHistory'),
 url(r'^review/v1.0/review/history/', reviewListAllHistory,name='reviewListAllHistory'),
-url(r'^review/v1.0/report/history/', reviewReportHistory,name='reviewReportHistory'),
-url(r'^review/v1.0/report/list/', reviewReportList,name='reviewReportList'),
-url(r'^review/v1.0/report/active/', reviewReportActive,name='reviewReportActive'),
-url(r'^review/v1.0/report/', reviewReport,name='reviewReport'),
+
+url(r'^review/v1.0/report/update/',sqlUpdate,name='sqlUpdate'),
+url(r'^review/v1.0/report/post/',sqlUpdateActive,name='sqlUpdateActive'),
+
+url(r'^review/v1.0/audit/history/data/', auditHistoryListDate,name='auditHistoryListDate'),
+url(r'^review/v1.0/audit/history/', auditHistoryList,name='auditHistoryList'),
+
+url(r'^review/v1.0/audit/execute/', auditExecute,name='auditExecute'),
+url(r'^review/v1.0/audit/PreExecute/', auditPreExecute,name='auditPreExecute'),
+url(r'^review/v1.0/audit/detail/', auditDetail,name='auditDetail'),
+url(r'^review/v1.0/report/list/', sqlAuditList,name='sqlAuditList'),
+url(r'^review/v1.0/report/post', sqlAuditPost,name='sqlAuditPost'),
+
+url(r'^review/v1.0/report/active/', sqlReportActive,name='sqlReportActive'),
+url(r'^review/v1.0/report/', sqlReport,name='sqlReport'),
 url(r'^user/v1.0/account/verification/', reviewUserLoginVerification,name='loginVerification'),
 url(r'^user/v1.0/account/login/', reviewUserLogin,name='userLogin'),
 url(r'^user/v1.0/account/logout/', reviewUserLogout,name='userLogout'),

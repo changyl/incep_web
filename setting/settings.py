@@ -89,17 +89,17 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # 或者使用 mysql.connector.django
         'NAME': 'auto_database',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST':'',
+        'USER': 'inception',
+        'PASSWORD': 'cyl_young',
+        'HOST':'172.16.16.29',
         'PORT':'3306',
     },
     'data_backup': {
         'ENGINE': 'django.db.backends.mysql',  # 或者使用 mysql.connector.django
         'NAME': 'inception',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST':'',
+        'USER': 'incep_stat',
+        'PASSWORD': 'cyl_soyoung',
+        'HOST':'172.16.16.20',
         'PORT':'3306',
     },
     'review': {
@@ -107,7 +107,7 @@ DATABASES = {
         #'NAME': '',
         'USER': 'root',
         'PASSWORD': '',
-        'HOST':'',
+        'HOST':'172.16.16.20',
         'PORT':'6669',
     }
 
