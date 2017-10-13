@@ -95,7 +95,7 @@ def getUserInfo(username):
     :return: 用户任务数、名称
     :desc:获取用户信息
     '''
-    sql_sum = '''select count(*) from tb_review where flag=0 and create_time >date_format(now(),'%Y-%m-%d 00:00:00')'''
+    sql_sum = '''select count(*) from tb_review where (flag=0 or flag=1) and create_time >date_format(now(),'%Y-%m-%d 00:00:00')'''
     cursor = connections['default'].cursor()
     cursor.execute(sql_sum)
     sum_row = cursor.fetchone()
@@ -106,11 +106,16 @@ def getUserInfo(username):
 
 
 def getUserInfo_02(username,sql_id):
+    '''
+    :param username:用户名称
+    :param sql_id:sql id
+    :return: 返回用户任务数、用户名称、sql审核内容
+    '''
     sql_detail_info = '''select * from tb_review_detail where sql_id={0}'''.format(sql_id)
     cursor = connections['default'].cursor()
     cursor.execute(sql_detail_info)
     row = cursor.fetchall()
-    sql_sum = '''select count(*) from tb_review where flag=0 and create_time>date_format(now(),'%Y-%m-%d 00:00:00')'''
+    sql_sum = '''select count(*) from tb_review where (flag=0 or flag=1) and create_time>date_format(now(),'%Y-%m-%d 00:00:00')'''
     cursor = connections['default'].cursor()
     cursor.execute(sql_sum)
     sum_row = cursor.fetchone()
@@ -129,7 +134,7 @@ def getUserInfoReport(username):
     :author: changyl
     :desc: 返回用户信息,包括单选列表
     """
-    sql_sum = '''select count(*) from tb_review where flag=1 and create_time >date_format(now(),'%Y-%m-%d 00:00:00') '''
+    sql_sum = '''select count(*) from tb_review where (flag=0 or flag=1) and create_time >date_format(now(),'%Y-%m-%d 00:00:00') '''
     cursor = connections['default'].cursor()
     cursor.execute(sql_sum)
     sum_row = cursor.fetchone()

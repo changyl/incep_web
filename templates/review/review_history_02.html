@@ -259,7 +259,7 @@
                     //defaultContent:"<button type='button' class='btn btn-primary btn-sm' data-toggle='modal' data-target='#myModal'><i class='fa  fa-edit'></i>修改</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type='button' class='btn btn-danger btn-sm' data-toggle='modal' data-target='#myModal'><i class='fa  fa-trash'></i>删除</button>"
                     //defaultContent: "<button id='editrow' class='btn btn-primary' type='button' style='margin-right:10px;'>编辑</button><button id='delrow' class='btn btn-primary' type='button'>删除</button>"
                     render: function (data, type, full) {
-                              return "&nbsp;&nbsp;&nbsp;<a type='button' href='/review/v1.0/review/detail/?sqlid="+data[0]+"' class='btn btn-info btn-sm' id='query'><i class='fa  fa-eye'></i>审核结果</a>"
+                              return "&nbsp;&nbsp;&nbsp;<a type='button' href='/review/v1.0/audit/detail/?sqlid="+data[0]+"' class='btn btn-info btn-sm' id='query'><i class='fa  fa-eye'></i>审核结果</a>"
                               }
                 }]
             });

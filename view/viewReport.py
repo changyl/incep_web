@@ -4,7 +4,7 @@ from django.http import HttpResponse as write
 from django.shortcuts import render
 from django.db.transaction import atomic
 from django.contrib.auth.views import login_required
-from baseTools import getUserInfo
+from baseTools import getUserInfoReport
 from models.models_inception import  tb_review
 import logging,sys
 
@@ -24,7 +24,7 @@ def sqlReport(request):
     '''审核内容上报'''
     try:
         if request.method == "GET" and request.user.is_staff == 0:
-            result = getUserInfo(username=request.user.username)
+            result = getUserInfoReport(username=request.user.username)
             return render(request, 'review/report.html', context=result)
         else:
             return render(request, 'review/404.html',context=None)
