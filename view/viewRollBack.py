@@ -24,7 +24,7 @@ logging.basicConfig(level=logging.DEBUG,
 @login_required()
 def reviewRollBack(request):
     try:
-        if request.method == 'POST' and request.user.is_staff == 1:
+        if request.method == 'POST':
             x_id = request.POST.get('xlh',None)
             db_bak = request.POST.get('db_bak',None)
             sql_id = request.POST.get('sql_id',None)
@@ -35,7 +35,7 @@ def reviewRollBack(request):
             sql_2 = '''select rollback_statement from {0}.{1} where opid_time={2};''' .format(db_bak,row_1[0],x_id)
             cursor = connections['data_backup'].cursor()
             cursor.execute(sql_2)
-            row_2 = cursor.fetchone()
+            row_2 = cursor.fetchall()
             rollback(sqlid=sql_id,content=row_2[0])
             return write(1)
         else:
@@ -49,23 +49,20 @@ def rollback(sqlid,content):
     '''执行回滚语句'''
     try:
         sql_dt_id = '''select database_id from tb_review where id={0}''' .format(sqlid)
-        print sql_dt_id
         cursor = connections['default'].cursor()
         cursor.execute(sql_dt_id)
         row1 = cursor.fetchone()
-        print row1
         sql_database_info  =  '''select host,user,passwd,port,db_name from tb_databases_config where id={0}'''.format(row1[0])
-        print  sql_database_info
         cursor = connections['default'].cursor()
         cursor.execute(sql_database_info)
         row2 = cursor.fetchone()
         logging.debug(sql_database_info)
-        print row2
-        sql = '''{0}''' .format(content)
-        print sql
+
+        sql = '''{0}''' .format(content[0])
         conn = MySQLdb.connect(host=row2[0], user=row2[1], passwd=row2[2], db=row2[4], port=row2[3])
         cur = conn.cursor()
         cur.execute(sql.encode('utf-8'))
+        logging.info(sql)
         result = conn.commit()
         return result
     except Exception,e:

@@ -24,7 +24,7 @@ def sqlReport(request):
     '''审核内容上报'''
     try:
         if request.method == "GET" and request.user.is_staff == 0:
-            result = getUserInfoReport(username=request.user.username)
+            result = getUserInfoReport(username=request.user.username,userid=request.user.id)
             return render(request, 'review/report.html', context=result)
         else:
             return render(request, 'review/404.html',context=None)

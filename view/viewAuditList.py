@@ -7,7 +7,7 @@ from django.contrib.auth.views import login_required
 from django.db import connections
 import logging,sys,datetime
 import collections,json
-from baseTools import fullExecute,preAuditExecute,inceptionQuery,getUserInfo_02,getUserInfo
+from baseTools import fullExecute,preAuditExecute,inceptionQuery,getUserInfo_02,getUserInfo_01
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
@@ -31,7 +31,7 @@ def sqlAuditList(request):
     '''所有审核内容上报列表'''
     try:
         if request.method == "GET" and request.user.is_staff == 0:
-            result = getUserInfo(username=request.user.username)
+            result = getUserInfo_01(username=request.user.username,userid=request.user.id)
             return render(request, 'review/review_list_all_02.html', context=result)
         else:
             return render(request, 'review/404.html', context=None)
@@ -50,12 +50,12 @@ def sqlAuditPost(request):
             draw = request.GET.get('draw',None)
             start = request.GET.get('start',None)
             length = request.GET.get('length',None)
-            sql_sum ='''select count(*) from tb_review where  create_time >date_format(now(),'%Y-%m-%d 00:00:00')'''
+            sql_sum ='''select count(*) from tb_review where  (flag=0 or flag=1)  and creator={0} and create_time >date_format(now(),'%Y-%m-%d 00:00:00')''' .format(request.user.id)
             # print sql_sum
             cursor = connections['default'].cursor()
             cursor.execute(sql_sum)
             sum_row = cursor.fetchone()
-            sql_arry = '''select t.id,d.db_name,t.database_id,t.content,t.flag,t.create_time,t.username,t.remarks,t.remark_user from (SELECT r.id as id,database_id,content,create_time ,u.username,r.flag,r.remarks,r.remark_user  FROM  tb_review as r left join auth_user as u ON r.creator=u.id where  r.create_time>date_format(now(),'%Y-%m-%d 00:00:00') ) as t left join tb_databases_config d on t.database_id=d.id  order by t.id desc  limit {0},{1};''' .format(start,length)
+            sql_arry = '''select t.id,d.db_name,t.database_id,t.content,t.flag,t.create_time,t.username,t.remarks,t.remark_user from (SELECT r.id as id,database_id,content,create_time ,u.username,r.flag,r.remarks,r.remark_user  FROM  tb_review as r left join auth_user as u ON r.creator=u.id where  r.create_time>date_format(now(),'%Y-%m-%d 00:00:00') AND r.creator = {0} ) as t left join tb_databases_config d on t.database_id=d.id  order by t.id desc  limit {1},{2};''' .format(request.user.id,start,length)
 
             cursor = connections['default'].cursor()
             cursor.execute(sql_arry)
@@ -162,7 +162,7 @@ def auditDetail(request):
     try:
         if request.method == "GET" and request.user.is_staff == 0:
             sql_id = request.GET.get('sqlid',None)
-            dict_report = getUserInfo_02(username=request.user.username,sql_id=sql_id)
+            dict_report = getUserInfo_02(username=request.user.username,sql_id=sql_id,userid=request.user.id)
             return render(request, 'review/review_detail_02.html', context=dict_report)
         else:
             return render(request, 'review/404.html', context=None)

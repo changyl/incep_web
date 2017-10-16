@@ -26,7 +26,7 @@ def sqlUpdate(request):
         if request.method == "GET" and request.user.is_staff == 0:
             username = request.user.username
             sql_id = request.GET.get('sqlid',None)
-            sql_sum = '''select count(*) from tb_review where flag=0 and create_time >date_format(now(),'%Y-%m-%d 00:00:00')'''
+            sql_sum = '''select count(*) from tb_review where creator={0} and create_time >date_format(now(),'%Y-%m-%d 00:00:00')''' .format(request.user.id)
             cursor = connections['default'].cursor()
             cursor.execute(sql_sum)
             sum_row = cursor.fetchone()

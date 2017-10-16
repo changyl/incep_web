@@ -229,7 +229,7 @@ def reviewDetail(request):
     try:
         if request.method == "GET" and request.user.is_staff == 1:
             sql_id = request.GET.get('sqlid',None)
-            dict_report = getUserInfo_02(username=request.user.username,sql_id=sql_id)
+            dict_report = getUserInfo_02(username=request.user.username,sql_id=sql_id,userid=request.user.id)
             return render(request, 'review/review_detail.html', context=dict_report)
         else:
             return render(request, 'review/404.html', context=None)

@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.db import connections
 from django.contrib.auth.views import login_required
 import collections,json,datetime,sys,logging
-from baseTools import getUserInfo
+from baseTools import getUserInfo_01
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -30,7 +30,7 @@ def auditHistoryList(request):
     '''所有审核内容上报历史'''
     try:
         if request.method == "GET" and request.user.is_staff == 0:
-            result = getUserInfo(username=request.user.username)
+            result = getUserInfo_01(username=request.user.username,userid=request.user.id)
             return render(request, 'review/review_history_02.html', context=result)
         else:
             return render(request, 'review/404.html', context=None)

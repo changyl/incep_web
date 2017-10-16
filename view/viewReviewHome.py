@@ -62,7 +62,7 @@ def loginHome(request):
             return render(request,'review/index_custom.html',context=dict_1)
         else:
             dict_1 = {}
-            sql_sum = '''select count(*) from tb_review where flag=0 and create_time >date_format(now(),'%Y-%m-%d 00:00:00')'''
+            sql_sum = '''select count(*) from tb_review where (flag=0 or flag=1) and creator={0} and create_time >date_format(now(),'%Y-%m-%d 00:00:00')''' .format(request.user.id)
             cursor = connections['default'].cursor()
             cursor.execute(sql_sum)
             sum_row = cursor.fetchone()

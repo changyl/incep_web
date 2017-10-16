@@ -95,7 +95,7 @@ def getUserInfo(username):
     :return: 用户任务数、名称
     :desc:获取用户信息
     '''
-    sql_sum = '''select count(*) from tb_review where (flag=0 or flag=1) and create_time >date_format(now(),'%Y-%m-%d 00:00:00')'''
+    sql_sum = '''select count(*) from tb_review where (flag=0 or flag=1)   and  create_time >date_format(now(),'%Y-%m-%d 00:00:00')'''
     cursor = connections['default'].cursor()
     cursor.execute(sql_sum)
     sum_row = cursor.fetchone()
@@ -104,8 +104,22 @@ def getUserInfo(username):
     dict['taskCount'] = sum_row
     return dict
 
+def getUserInfo_01(username,userid):
+    '''
+    :param username: cyl
+    :return: 用户个体的任务数、名称
+    :desc:获取用户信息
+    '''
+    sql_sum = '''select count(*) from tb_review where (flag=0 or flag=1)  and CREATOR={0} and  create_time >date_format(now(),'%Y-%m-%d 00:00:00')''' .format(userid)
+    cursor = connections['default'].cursor()
+    cursor.execute(sql_sum)
+    sum_row = cursor.fetchone()
+    dict = {}
+    dict['name'] = username
+    dict['taskCount'] = sum_row
+    return dict
 
-def getUserInfo_02(username,sql_id):
+def getUserInfo_02(username,sql_id,userid):
     '''
     :param username:用户名称
     :param sql_id:sql id
@@ -115,7 +129,7 @@ def getUserInfo_02(username,sql_id):
     cursor = connections['default'].cursor()
     cursor.execute(sql_detail_info)
     row = cursor.fetchall()
-    sql_sum = '''select count(*) from tb_review where (flag=0 or flag=1) and create_time>date_format(now(),'%Y-%m-%d 00:00:00')'''
+    sql_sum = '''select count(*) from tb_review where (flag=0 or flag=1) and creator={0} and create_time>date_format(now(),'%Y-%m-%d 00:00:00')''' .format(userid)
     cursor = connections['default'].cursor()
     cursor.execute(sql_sum)
     sum_row = cursor.fetchone()
@@ -127,14 +141,14 @@ def getUserInfo_02(username,sql_id):
 
 
 
-def getUserInfoReport(username):
+def getUserInfoReport(username,userid):
     """
     :param username:
     :return: dict
     :author: changyl
     :desc: 返回用户信息,包括单选列表
     """
-    sql_sum = '''select count(*) from tb_review where (flag=0 or flag=1) and create_time >date_format(now(),'%Y-%m-%d 00:00:00') '''
+    sql_sum = '''select count(*) from tb_review where (flag=0 or flag=1) and creator={0} and create_time >date_format(now(),'%Y-%m-%d 00:00:00') ''' .format(userid)
     cursor = connections['default'].cursor()
     cursor.execute(sql_sum)
     sum_row = cursor.fetchone()
